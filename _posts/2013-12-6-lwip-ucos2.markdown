@@ -1,0 +1,34 @@
+---
+layout: post
+title: Porting lwIP to UC/OS-II
+---
+
+For this year Eurobot, the CVRA is building two different robots, and also doing some computer vision.
+While this sounds nice, it also comes with added complexity : The two robots have to communicate with the two computer vision boards,
+and with each other, using the communication architecture below (Debra-4 being our main robot with SCARA arms and Nastya-2 our holonomic platform).
+
+
+INSERT IMAGE HERE
+
+
+Developping so much communication between embedded systems can be quite a headache, especially when it comes to debugging and trying
+to take a peek at what the messages are. It would be really nice if we could spare the time of writing the communication stack and debug
+tools and jump straight to the application. This is where IP (either TCP/IP or UDP/IP) becomes useful : It take cares of packet routing, differenciation
+using ports numbers and we also have fantastic debugs tools available, like Wireshark.
+
+
+lwIP is a small implementation of the IP protocol, whose main focus is to avoid relying on specific OS constructs and keeping a very low memory footprint, which makes it perfect for embedded systems.
+In addition to TCP/IP and UDP/IP, it provides PPPoS, which will be really useful to us, as we don't have Ethernet connectivity on the FPGA boards.
+
+As you can see on the architecture schematic, both of our FPGA boards will be running a shiny NIOS-II softcore processor, which in turn will be running the UC/OS-II operating system.
+While softcores have been in use at the club for four years now, we did not have any kind of OS on it, only a simple, homebrew and buggy round robin scheduler, which really needed
+o get replaced by something cleaner.
+At first we were hesitating between two operating systems, UC/OS-II and FreeRTOS.
+The second appealed to us due to its Open Source License, and a greater feature set than UC/OS-II.
+On the other hand, UC/OS-II was widely used, was extensively documented and had previously been sent to Mars by the NASA (which is pretty cool).
+What finally decided towards UC/OS-II was the fact that there was a commercial port of it on our target platform and we wanted to avoid the time expense of porting an RTOS ourselves.
+
+
+Now that we know what operating system will run our lwIP port, we can start searching for some documentation about the porting process.
+The main sources of information regarding the process of porting lwIP to a new system are the [http://lwip.wikia.com/wiki/Porting_for_an_OS](Porting guide), `doc/sys_arch.txt` in the lwIP source tree and finally, the comments in the source itself.
+After a bit of reading, we know that we will have to provide three files :
