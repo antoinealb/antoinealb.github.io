@@ -12,18 +12,16 @@ defaults:
     scope:
       path: "" # empty string for all files
     values:
-      title: dbyll
+      title: Antoine's blog
 
-description: Stylish Jekyll Theme
+description: A blog about robotics, embedded software and Linux
 author:
-  name: dbyll
-  email: dbyll@ismaildemirbilek.com
-  github: dbtek
-  twitter: dbtek
-  pinterest: asd123
-  linkedin: asd123
-  bio: Your stylish, minimalist theme!
-  email_md5: 726351295ec82e145928582f595aa3aa
+  name: Antoine Albertelli
+  email: antoinea101@gmail.com
+  github: antoinealb
+  twitter: antoinealb
+  bio: Swiss robotics enthusiast, studying MicroEngineering in Lausanne
+  email_md5: 1d2591a8b213644c8dfe38098e71b46d
 
 rss_path: feed.xml
 categories_path: categories.html
