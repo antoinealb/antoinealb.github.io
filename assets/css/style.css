@@ -93,6 +93,7 @@ article{
 .article_body{
 	margin-top: 20px;
 	margin-bottom: 20px;
+    text-align:justify;
 }
 
 .post-date {
