@@ -1,5 +1,5 @@
 ---
-title: Working with the TI Tiva Launchpad on LinuRobotics x
+title: Working with the TI Tiva Launchpad on Linux
 layout: post
 categories: Programming
 tags: c arm linux
