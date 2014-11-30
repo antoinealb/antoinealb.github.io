@@ -8,7 +8,7 @@ While this sounds nice, it also comes with added complexity : The two robots hav
 and with each other, using the communication architecture below (Debra-4 being our main robot with SCARA arms and Nastya-2 our holonomic platform).
 
 
-![CVRA 2014 System architecture]({{ site.url }}/assets/robot_architecture.png)
+![CVRA 2014 System architecture]({{ site.url }}/assets/media/robot_architecture.png)
 
 
 Developping so much communication between embedded systems can be quite a headache, especially when it comes to debugging and trying
