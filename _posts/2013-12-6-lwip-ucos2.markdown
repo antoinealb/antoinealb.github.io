@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Porting lwIP to UC/OS-II
+categories: Robotics Programming
+tags: ucos2 nios2 lwip
 ---
 
 For this year Eurobot, the CVRA is building two different robots, and also doing some computer vision.
