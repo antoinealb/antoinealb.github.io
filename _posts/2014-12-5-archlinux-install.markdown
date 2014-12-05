@@ -113,24 +113,23 @@ It should improve latency, but I am happy as is, so I prefer to stay on tried an
 
 ## Keyboard
 For virtual consoles, `/etc/vconsole.conf`:
-```
+{% highlight shell %}
 KEYMAP=fr_CH
-```
+{% endhighlight %}
 
 ## Trackpoint (TBD)
 Put the following in `/etc/X11/xorg.conf.d/20-thinkpad.conf`
-```
-Section "InputClass"
-        Identifier      "Trackpoint Wheel Emulation"
-        MatchProduct    "TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint"
-        MatchDevicePath "/dev/input/event*"
-        Option          "EmulateWheel"          "true"
-        Option          "EmulateWheelButton"    "2"
-        Option          "Emulate3Buttons"       "false"
-        Option          "XAxisMapping"          "6 7"
-        Option          "YAxisMapping"          "4 5"
-EndSection
-```
+
+    Section "InputClass"
+            Identifier      "Trackpoint Wheel Emulation"
+            MatchProduct    "TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint"
+            MatchDevicePath "/dev/input/event*"
+            Option          "EmulateWheel"          "true"
+            Option          "EmulateWheelButton"    "2"
+            Option          "Emulate3Buttons"       "false"
+            Option          "XAxisMapping"          "6 7"
+            Option          "YAxisMapping"          "4 5"
+    EndSection
 
 # AUR and Yaourt
 For those of you who don't know, the Arch User Repository (AUR) is a collection of non-official packages that are built from source.
@@ -144,11 +143,11 @@ But for this install, I went a little bit integrist and decided that adding a re
 Fortunately, Yaourt only has a few dependencies, and only one must be installed by hand from the AUR: `package-query`.
 The command to install it is really close to the one used to install yaourt :
 
-```shell
+{% highlight shell %}
 wget https://aur.archlinux.org/packages/ya/yaourt/PKGBUILD
 makepkg
-sudo pacman -U yaourt*
-```
+sudo pacman -U yaourt.xz # replace with name of the ouput file
+{% endhighlight %}
 
 For the software updates, don't worry: Yaourt will now update itself from source.
 
@@ -168,13 +167,13 @@ I will just list the few software I installed in case I need to do it again.
 Virtualbox required a bit of configuration because it uses some kernel modules.
 You need to put the following in `/etc/modules-load.d/virtualbox.conf`:
 
-```
+{% highlight shell %}
 # VirtualBox modules
 vboxdrv
 vboxnetadp
 vboxnetflt
 vboxpci
-```
+{% endhighlight %}
 
 # Wifi
 Currently I am using NetworkManager;
@@ -189,18 +188,20 @@ Install it with `yaourt -S powertop`.
 To save some power I disabled Bluetooth completely since I was not using it.
 
 Put the following in `/etc/modprobe/modprobe.conf` :
-```
+
+{% highlight shell %}
 # disable bluetooth to save power
 blacklist btusb
 blacklist bluetooth
-```
+{% endhighlight %}
 
 ## Kernel parameters
 There are some kernel parameters which can be incredibly efficient at saving power.
 Powertop can help you finding those.
 
 For now I have put the following in `/etc/sysctl.d/powersaving.conf` :
-```
+
+{% highlight python %}
 # Non maskable watchdog creates a lot of interrupts, disable it
 kernel.nmi_watchdog = 0
 
@@ -209,7 +210,7 @@ vm.dirty_writeback_centisecs = 6000
 
 # Seems to be a bit magic but recommended
 vm.laptop_mode = 5
-```
+{% endhighlight %}
 
 
 ## Laptop mode
@@ -221,16 +222,14 @@ You should really do it on the mouse and keyboard, otherwise it just drives you 
 To do this, first use `lsusb` to find the device ID.
 For example for my WASD keyboard the relevant line is :
 
-```
-Bus 001 Device 006: ID 04d9:0169 Holtek Semiconductor, Inc.
-```
+> Bus 001 Device 006: ID 04d9:0169 Holtek Semiconductor, Inc.
 
 and the device ID here is `04d9:0169`.
 Then put this in `/etc/laptop-mode/conf.d/runtime-pm.conf` :
 
-```
+{% highlight python %}
 AUTOSUSPEND_USBID_BLACKLIST="04d9:0169"
-```
+{% endhighlight %}
 
 Multiple blacklisted IDs are separated by spaces.
 Finaly run `systemctl restart latop-mode`.
@@ -240,9 +239,10 @@ Finaly run `systemctl restart latop-mode`.
 Here again, to enable it we simply follow the Arch Wiki:
 
 `/etc/udev/rules.d/pci_powersave.rules` :
-```
+
+{% highlight python %}
 ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
-```
+{% endhighlight %}
 
 
 # Sound
@@ -277,9 +277,9 @@ I decided to use GDM because it is very well integrated and lightweight enough.
 It is already in `gnome-extra`, so you only need to run `systemctl enable gdm.service`.
 
 ## XMonad
-```sh
+{% highlight shell %}
 yaourt -S xmonad xmonad-contrib xmonad-gnome3 dmenu
-```
+{% endhighlight %}
 The config files are hosted in Git so they will be easy to retrieve.
 Just don't forget to run `xmonad --recompile` before starting the xmonad session.
 
@@ -294,10 +294,10 @@ I don't use it a lot (it may change if I do some OpenGL).
 
 We simply install `bbswitch` and then put the following in `/etc/modprobe/modprobe.conf` :
 
-```
+{% highlight shell %}
 # disable NVidia card at boot
 options bbswitch load_state=0 unload_state=0
-```
+{% endhighlight %}
 
 # To be done
 Those parts are the one which I still need to do.
@@ -308,9 +308,9 @@ TBD
 
 ## Backup solution
 Still to be done, but something in the spirit of :
-```sh
+{% highlight shell %}
 rsync -aAXv /home/antoine/ /path/to/backup/
-```
+{% endhighlight %}
 
 It also needs to handle different backup locations, because one backup disk will stay at home and the second will stay at EPFL.
 
