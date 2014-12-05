@@ -1,3 +1,8 @@
+---
+layout: post
+title: My notes on installing Arch for my laptop
+tags: linux
+---
 I recently decided I wanted to reinstall my Arch Linux system.
 I have been running Arch on my Lenovo T420s for a few years now, and it has been working flawlessly.
 However, I started working a lot with virtual machines, I was slowly running out of disk space.
