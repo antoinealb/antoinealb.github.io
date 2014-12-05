@@ -1,76 +1,101 @@
-# Summary
-## Needed features
-* [X] Desktop environment, preferably GNOME+XMonad
-* [X] Wifi, preferably using NetworkManager because of user friendlyness.
-* [ ] CUPS
-* [X] Sound
-* [X] Web browsing
-* [X] The usual code tools
-* [ ] USB3.0, should work out of the box (How to test ?)
-* [X] Main filesystems should be optimized for SSDs
-* [X] Powersaving should be optimal-ish
-* [ ] Optimus, at least disabling the Nvidia card for powersaving
-* [X] Webcam
-* [ ] Full (not incremental) backup solution for `/home`
-* [X] VirtualBox
-* [X] Music player (Clementine)
-* [X] LibreOffice
-* [ ] Latex
+I recently decided I wanted to reinstall my Arch Linux system.
+I have been running Arch on my Lenovo T420s for a few years now, and it has been working flawlessly.
+However, I started working a lot with virtual machines, I was slowly running out of disk space.
+Since I wanted to document my installation for future reference, and I thought it may be useful to someone, I decided to make a blog post about it.
 
-## Medium priority
-* Hard drive protection: Modern hard drives should be able to resist a shock
+## Why reinstall ? You could have migrated instead!
+I wanted to split my data between a spinning hard drive for my data and virtual machines and a SSD for my host OS.
+I could probably have migrated the data to the new drive, changed partition size and changed config just to make it work;
+It would have been very complex and error prone.
+Remember the first point of the Arch Way:
 
-## Features we don't give a fuck about
-* Fingerprint reader
+> Simplicity is absolutely the principal objective behind Arch development.
 
-# Partition scheme
-We will keep the disks running using MBR.
-The main limitation in my use case is that we cannot use more than 4 partitions per disk, but even that could be worked around by using logical partitions.
+# Pre-install planning
+Before wiping the hard drive, I took a few days to note what I was really using on my existing installation.
+I researched those topics, mostly using the ArchWiki, to make sure the install would be painless.
+After a few days of research, here is the list of what should work on my system in the end :
 
-Lessons learnt from previous install:
+* Desktop environment. I am currently using GNOME3 with XMonad.
+* Wifi. Wpa supplicant is not a lot of fun: I want NetworkManager to work.
+* CUPS. At home I have a printer that I know is not working with CUPS on Linux, but at least at the university it should.
+* Sound multiplexing between different applications.
+* Web browsing.
+* Usual programming environment.
+* TRIM support for the SSD.
+* Powersaving should be optimal-ish.
+* My laptop has two different graphic cards. I should be able to disable the Nvidia one to avoid eating all the power.
+* The webcam should work, even if I use it twice a year.
+* VirtualBox and Vagrant.
+* Music player. I decided to go with Clementine (a fork of Amarok 2.X) since a friend advised it to me.
+* LibreOffice
+* Latex
+* Dual boot with Windows. I am not entierly sure this is really needed. Maybe I will just try working with more virtual machines.
 
-1. 25G for `/` is not enough.
-2. No need for swap.
-3. 100G for windows seems ok.
-4. Don't put pacman cache in tmpfs, but instead empty it manually.
-5. Having a few extra partitions for testing is nice.
+I decided not to implement the use of the fingerprint reader for two reasons.
+First it is a bit of a pain to support for Linux, and is prone to breaking.
+Then because fingerprint are not a correct way to authenticate yourself on a system.
+Since you leave them on almost everything you touch, they do not provide additional security.
 
-Apparently being block aligned is important.
-Just align it on 1024kb.
-Apparently GParted will do this for us.
+Don't forget to do a full backup of your home partition before reinstalling.
+I almost forgot to copy my SSH keys, which would have left me locked out of my servers.
 
-##Disk 1 (SSD, 160G):
+# Installation
+For the installation part of the process, I highly suggest reading Arch's beginner guide.
+It is one of the most complete installation walkthrough I saw and it explains your different options very well.
+I won't go into details that are in there, and focus on what is specific to my system.
+
+## Partionning
+After booting the installer USB key, the first step before installing is the partionning of the system.
+I decided to stay on an MBR partition scheme, even if my system supports EFI and GPT, because I did not need more than 4 partitions per disk.
+
+From my previous installation of Arch Linux, I learn a few things about partition sizing:
+
+* 25G for `/` is not enough, at least for my usage.
+* Swap partition is useless.
+    Do a swapfile if you really need suspend or swap ram.
+* 80G for a Windows partition seems enough.
+* I used to put the pacman cache in a tmpfs that would get wiped at each boot.
+    This is a bad idea;
+    most problems are only seen after a reboot, when you cannot downgrade your packages.
+* Having an empty partition or two that you can use to temporarily install a Linux/BSD to is useful.
+    This problem can be mitigated by using virtual machines, but for sustained use they are less comfortable.
+
+For SSDs it is recommended aligning your partitions on 1024kb blocks, but I think partition tools will do it for you anyways.
+
+Finally I went with the following partition scheme for my main drive, which is a 160G Intel SSD:
 
 1. Windows partition, 80G, NTFS
 2. `/boot`, 200M, ext4
-3. `/` on the rest, ext4
+3. `/` on the leftover space (about 70G), ext4
 
-##Disk 2 (HDD, 500GO):
+My second disk is only made of `/home` right now, but I plan to put other testing partitions on it when I get a bigger drive.
 
-*For now this is only theoretical, as I don't have the 500GB disk yet.
-I am currently using an 80G drive as my home device, with only one ext4 partition.
-I will update this section with the migration informations when I do it.*
+## Bootloader installation
+I decided to keep Syslinux as on my previous install.
+I like it because it is quite powerful and way easier to setup than GRUB2.
+However, it only supports MBR and BIOS booting;
+if you use EFI you'll have to use another bootloader.
 
-The second disk has 2 available partitions for general purpose use, and allow some flexibility.
-It can be used to install an alternative OS for testing, or to provide more disk space to windows to install a few games.
-`/home` is formatted in ext4, because I don't see any need for something else.
+The installation was quite difficult, and it took me quite a while to understand what was wrong:
+The BIOS would just loop on the boot device selection screen.
+I tried redoing the installation and the formatting a few times, thinking it had something to do with the MBR.
+This was by far the most time consuming part of the reinstall.
+After a few tries, I realized my BIOS was set to try EFI boot first.
+After changing it to BIOS emulation, it worked perfectly.
+This is a bit weird, as it worked flawlessly and the settings haven't changed since.
+I did not investigate it further and went on with my install.
 
-1. Part A, 80G
-2. Part B, 80G
-4. `/home`, the rest, ext4
+## Basic setup: User, vim and sudo
+After my first succesful boot, the first thing I did was installing a non priviledged user.
+Doing your work as root is dangerous: even if you are not the target of hackers, any mistake can be a disaster.
+I installed `sudo` and setup it to accept my user as temporary superuser, which was super easy thanks to the wiki.
+The most important trick here is to never edit the config files directly but instead to use `visudo`.
+Not doing it can result in you being locked out of your computer.
 
-# Installation notes
-_Always do a full backup before. Don't forget that your SSH keys are not visible in your file explorer_
+I also directly installed Vim, as I wanted to be able to edit my config files in my usual editor.
+Since I store my vimrc and other configs on Github I just had to clone them to the appropriate location.
 
-## Bootloader
-I decided to keep Syslinux, because it worked pretty well, but I had a few issues during the install;
-my drive was not recognized by my BIOS as bootable.
-After a few reinstall to try various GPT/MBR settings, I noticed that the boot mode was to prefer UEFI boot.
-After changing it to prefer BIOS boot, it worked perfectly.
-I wonder how it worked before.
-
-## User and sudo
-This was trivial, simply use the wiki.
 
 ## Optimizing for SSDs
 For now I did not do much, simply replaced the `relatime` option with `noatime` on my SSD filesystems to reduce write wear.
