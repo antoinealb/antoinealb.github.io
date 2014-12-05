@@ -25,7 +25,7 @@ After a few days of research, here is the list of what should work on my system 
 * TRIM support for the SSD.
 * Powersaving should be optimal-ish.
 * My laptop has two different graphic cards. I should be able to disable the Nvidia one to avoid eating all the power.
-* The webcam should work, even if I use it twice a year.
+* The webcam should work, even if I use it twice a year. It worked out of the box so I won't talk about it.
 * VirtualBox and Vagrant.
 * Music player. I decided to go with Clementine (a fork of Amarok 2.X) since a friend advised it to me.
 * LibreOffice
@@ -77,7 +77,8 @@ I like it because it is quite powerful and way easier to setup than GRUB2.
 However, it only supports MBR and BIOS booting;
 if you use EFI you'll have to use another bootloader.
 
-The installation was quite difficult, and it took me quite a while to understand what was wrong:
+The installation was quite difficult, and it took me quite a while to understand what was wrong:local/rvm/log/1417816661_ruby-2.1.2/update_system.log’ for reading: No such file or directory
+Requirements installation failed with status:
 The BIOS would just loop on the boot device selection screen.
 I tried redoing the installation and the formatting a few times, thinking it had something to do with the MBR.
 This was by far the most time consuming part of the reinstall.
@@ -98,43 +99,20 @@ Since I store my vimrc and other configs on Github I just had to clone them to t
 
 
 ## Optimizing for SSDs
-For now I did not do much, simply replaced the `relatime` option with `noatime` on my SSD filesystems to reduce write wear.
-I also added the `discard` option to handle TRIM properly.
-Apparently replacing the IO scheduler could help improve latency but I haven't done it yet.
-Once I get my real drive I should put a few directories on it apparently.
+For now I simply replaced the `relatime` option with `noatime` on my SSD filesystems (in `/dev/fstab`).
+This reduces write wear by not writing the access date each time the file is opened for reading.
+I also added the `discard` option, which enables TRIM support on SSDs.
 
-## Yaourt and AUR
-I chose not to install Yaourt via the archlinuxfr mirror, because I don't like to add a mirror just for a single software.
-This choice made it slightly more difficult to install yaourt using the PKGBUILD directly, but is much cleaner.
-Yaourt will now be update from source along other software.
+The next step would be to replace the kernel IO scheduler.
+It should improve latency, but I am happy as is, so I prefer to stay on tried and true schedulers.
 
-
-# Programming environment
-* Vim. Actually this is the first package I installed because doing everything in nano feels so horrible. Also replaced it with `gvim` to have graphical clipboard support.
-* Git
-* Mercurial
-* `base-devel`
-* `the_silver_searcher`
-* Vagrant + VirtualBox
-* Screen
-
-Don't forget that to run VirtualBox, you need to put the following in `/etc/modules-load.d/virtualbox.conf`:
-
-```
-# VirtualBox modules
-vboxdrv
-vboxnetadp
-vboxnetflt
-vboxpci
-```
-
-# Keyboard
+## Keyboard
 For virtual consoles, `/etc/vconsole.conf`:
 ```
 KEYMAP=fr_CH
 ```
 
-# Trackpoint (TBD)
+## Trackpoint (TBD)
 Put the following in `/etc/X11/xorg.conf.d/20-thinkpad.conf`
 ```
 Section "InputClass"
@@ -149,16 +127,62 @@ Section "InputClass"
 EndSection
 ```
 
+# AUR and Yaourt
+For those of you who don't know, the Arch User Repository (AUR) is a collection of non-official packages that are built from source.
+You can build them using an official tool called `makepkg` but it is not easy and forces you to track dependencies and updates by hand.
+To avoid this, you can use what is called an AUR wrapper, and Yaourt is my favourite.
+
+For security reasons the Arch official repositories won't contain such wrappers.
+This means that to install one, we must either find a binary package somewhere or build it from the AUR.
+Last time, I decided to use the binary package which can be found on the ArchLinuxFr repository.
+But for this install, I went a little bit integrist and decided that adding a repository for a single package was overkill and dangerous.
+Fortunately, Yaourt only has a few dependencies, and only one must be installed by hand from the AUR: `package-query`.
+The command to install it is really close to the one used to install yaourt :
+
+```shell
+wget https://aur.archlinux.org/packages/ya/yaourt/PKGBUILD
+makepkg
+sudo pacman -U yaourt*
+```
+
+For the software updates, don't worry: Yaourt will now update itself from source.
+
+
+# Programming environment
+This one does not require much explanation.
+I will just list the few software I installed in case I need to do it again.
+
+* `base-devel`. It contains a lot of useful tools such as `make` or `gcc`
+* Vim. Actually I use `gvim` to have support for the X clipboard.
+* Git
+* Ag. It is in package `the_silver_searcher` package.
+* Mercurial
+* Screen
+* Vagrant + VirtualBox
+
+Virtualbox required a bit of configuration because it uses some kernel modules.
+You need to put the following in `/etc/modules-load.d/virtualbox.conf`:
+
+```
+# VirtualBox modules
+vboxdrv
+vboxnetadp
+vboxnetflt
+vboxpci
+```
+
 # Wifi
-Currently I am using NetworkManager, which is pretty well integrated into GNOME.
-I have currently no way of configuring it from XMonad, which will need to be fixed soon.
+Currently I am using NetworkManager;
+it is pretty well integrated into GNOME, so there is not much to say about it.
 I also still have to install `dnsmasq` to handle connection sharing.
 
 # Powersaving
-`powertop` is pretty useful for analysis.
-Install it with `pacman -S powertop`.
+First of all, if you want to optimize your power saving, `powertop` is a real life saver.
+Install it with `yaourt -S powertop`.
 
 ## Disabling Bluetooth
+To save some power I disabled Bluetooth completely since I was not using it.
+
 Put the following in `/etc/modprobe/modprobe.conf` :
 ```
 # disable bluetooth to save power
@@ -167,8 +191,10 @@ blacklist bluetooth
 ```
 
 ## Kernel parameters
-Put the following in `/etc/sysctl.d/powersaving.conf` :
+There are some kernel parameters which can be incredibly efficient at saving power.
+Powertop can help you finding those.
 
+For now I have put the following in `/etc/sysctl.d/powersaving.conf` :
 ```
 # Non maskable watchdog creates a lot of interrupts, disable it
 kernel.nmi_watchdog = 0
@@ -184,11 +210,11 @@ vm.laptop_mode = 5
 ## Laptop mode
 We can install laptop mode tools by doing `yaourt -S laptop-mode-tools`.
 We then enable it by doing `systemctl enable laptop-mode`.
-Do not forget about blacklisting usb autosuspend on a few devices.
-We should really do it on the mouse and keyboard, otherwise it just drives you insane.
+Don't forget about blacklisting usb autosuspend on a few devices.
+You should really do it on the mouse and keyboard, otherwise it just drives you insane.
 
 To do this, first use `lsusb` to find the device ID.
-For example for the WASD keyboard the relevant line is :
+For example for my WASD keyboard the relevant line is :
 
 ```
 Bus 001 Device 006: ID 04d9:0169 Holtek Semiconductor, Inc.
@@ -206,72 +232,38 @@ Finaly run `systemctl restart latop-mode`.
 
 
 ## PCI Power management
+Here again, to enable it we simply follow the Arch Wiki:
+
 `/etc/udev/rules.d/pci_powersave.rules` :
 ```
 ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
 ```
 
 
-# CUPS
-Needs testing @EPFL
-
 # Sound
-First we need to configure the sound card driver to use the correct model.
-Put the following in `/etc/modprobe/modprobe.conf` :
-```
-```
+Sound is supported in two places:
+First the kernel is responsible for providing an interface to the audio hardware.
+This is done through something called ALSA.
+The main issue with ALSA is that it can only listen to a single audio stream.
+We use a userland daemon called PulseAudio (some will hate me) to do this.
+To install it, simply run `yaourt -S pulseaudio` and it works.
+It might even be installed by your desktop.
 
-The rest will be done using ALSA (included in the kernel) and PulseAudio.
-We can simply do it by installing `pulseaudio`.
+I had to install a few Gstreamers plugins for MP3 support, and honestly, I don't really know which one enabled it.
+Just install everything in the base and ugly group.
 
-To read MP3 in clementine I installed almost all gstreamers plugin to finally have it work with the base and ugly plugins. But just install them all.
+# Web tools
+I did not need anything fancy.
+I just wanted Firefox and Chrome, in case one of them stops working.
 
-
-
-# Web browsing
-`pacman -S chromium firefox irssi`
+The installation was simply `yaourt -S chromium firefox`
 
 # Network tools
-
-`yaourt -S transmission ssh mosh nmap`
-
-# Hard drive protection sensor
-https://wiki.archlinux.org/index.php/Hard_Drive_Active_Protection_System
-
-Looks a little bit outdate (rc.conf what?)
-
-Apparently the current trend is to protect it via making uber resistant hard drives.
-
-I should ask Joseph if he did anything to protect his drives.
-
-# X11
-
-## Optimus
-Optimus support so far is simply disabling the Nvidia card.
-I don't use it a lot (it may change if I do some OpenGL).
-
-We simply install `bbswitch` and then put the following in `/etc/modprobe/modprobe.conf` :
-
-```
-# disable NVidia card at boot
-options bbswitch load_state=0 unload_state=0
-```
-
-# Webcam
-Worked out of the box.
-
-# Backup solution
-Something in the spirit of :
-```sh
-rsync -aAXv /home/antoine/ /path/to/backup/
-```
-
-It also needs to handle different backup locations, because one backup disk will stay at home and the second will stay at EPFL.
-
-Also, don't forget to exclude `~/.cache`, `~/.config` and maybe other (hidden) folders.
-
-Should the script be unit tested ? ;)
-
+To put it in a Cyberpunk way : "All I needed was a few tools to make my way through the Net"
+I wanted SSH and Mosh, to connect to servers.
+I also wanted Irssi to chat on IRC.
+Transmission is really the best client out there to download your favorite Linux distribution or Creative Commons music (wink wink).
+Nmap is really useful for network diagnosis, so let's install it as well.
 
 # Desktop environment
 ## Gnome 3
@@ -286,9 +278,51 @@ yaourt -S xmonad xmonad-contrib xmonad-gnome3 dmenu
 The config files are hosted in Git so they will be easy to retrieve.
 Just don't forget to run `xmonad --recompile` before starting the xmonad session.
 
-# Media Transfer Protocol
+## Media Transfer Protocol
 The media transfer protocol is a USB device class used by my Nexus 7 to access its memory.
 It was pretty easy to install : `pacman -S gvfs-mtp libmtp`.
+
+
+# Optimus
+Optimus support so far is simply disabling the Nvidia card.
+I don't use it a lot (it may change if I do some OpenGL).
+
+We simply install `bbswitch` and then put the following in `/etc/modprobe/modprobe.conf` :
+
+```
+# disable NVidia card at boot
+options bbswitch load_state=0 unload_state=0
+```
+
+# To be done
+Those parts are the one which I still need to do.
+They look more like notes, because they are.
+
+## CUPS
+TBD
+
+## Backup solution
+Still to be done, but something in the spirit of :
+```sh
+rsync -aAXv /home/antoine/ /path/to/backup/
+```
+
+It also needs to handle different backup locations, because one backup disk will stay at home and the second will stay at EPFL.
+
+Also, don't forget to exclude `~/.cache`, `~/.config` and maybe other (hidden) folders.
+
+Should the script be unit tested ?
+
+## Hard drive protection sensor
+Still to be done, but here are my notes.
+
+https://wiki.archlinux.org/index.php/Hard_Drive_Active_Protection_System
+
+Looks a little bit outdate (rc.conf what?)
+
+Apparently the current trend is to protect it via making uber resistant hard drives.
+
+I should ask Joseph if he did anything to protect his drives.
 
 # Non DKMS modules
 Those modules are the one that needs to be updated after each major kernel update.
