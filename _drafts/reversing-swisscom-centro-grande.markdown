@@ -93,5 +93,63 @@ What can we learn from it ?
     After playing a bit with cpio (the tool to extract ramfs images) I have the feeling that there is too much in there for just an initramfs.
     Maybe some kind of manufacturing mode ?
     I haven't investigated too much into it, as it is probably useless once the router booted.
+5. Two filesystems using CramFS, which is specially designed for embedded use with flash.
+    We can take a look at them because Binwalk can extract such filesystems.
+    One of them contains what looks like kernel modules.
+
+The other filesystem looks like a rootfs.
+It contains a few standard UNIX directories such as etc, bin or home.
+
+# Analyizing /etc
+I will now take a look at what is in /etc.
+For those who don't know, etc is the place where most config files go in UNIX.
+So far I only took a look at the configuration for OpenSSH server (`/etc/ssh/sshd_config`).
+
+{% highlight shell %}
+Port 22
+AddressFamily inet
+{% endhighlight %}
+
+This only tells us that SSH is listening on every IPv4 adress on port 22 (default).
+The next interesting section gives us some informations about what kind of authentication is allowed :
+
+{% highlight shell %}
+PermitRootLogin yes
+RSAAuthentication no
+PubkeyAuthentication no
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+PermitEmptyPasswords yes
+{% endhighlight %}
+
+I don't know much about SSH.
+What I know though is that authorizing root login via password is not really smart.
+Also empty password were explicictely turned on (PermitEmptyPasswords defaults to no).
+This is interesting, but I am not sure those are the settings used in production, maybe it is only for factory mode.
+
+# Playing with telnet
+Enough static analysis, it is time to boot that router!
+Running Nmap against it reveals that telnet is opened.
+After trying a few user / password combinations, it seems that `admin` / `1234` works as login / pass.
+
+We land in a configuration utility, but I think we can do better...
+
+## Getting a shell
+
+1. Connect to the router : `telnet 192.168.1.1`. User: `admin`, pass: `1234`
+2. Go to factory settings : `factory` and enter the command `factory-mode`.
+    This is a hidden command I found in an XML file in the routeur filesystem.
+3. Your router will reboot.
+    Once it has reboot, reset it using the reset button (at least I had to do it).
+4. The router won't give you a DHCP lease anymore, so configure your network card manually.
+5. Telnet on it again, but this time use `admin` as username and password.
+6. Lauch `system shell`.
+    You will land on a real BusyBox shell !
+    Next step would be root access, which I haven't managed to do yet.
+
+![shell acess]({{ site.url }}/assets/media/swisscom-shell.png)
+
+To get back to normal mode, exit the shell and then run `restore default-setting`.
+The router will reboot into normal mode.
 
 
