@@ -2,7 +2,6 @@
 layout: post
 title: Reverse engineering Swisscom's Centro Grande
 tags: linux
-categories: Reverse Engineering
 ---
 
 Recently Swisscom (Switzerland's biggest ISP) decided to give me a new box (modem + router + hotspot) since the previous one was already 7 years old.
@@ -29,7 +28,7 @@ The most complicated ones involve playing with JTAG or examining the chip under 
 Fortunately for me, the firmware updates are quite easy to find on the web.
 To download it simply run the following command (Bluewin is the former name of the ISP part of Swisscom).
 
-{% highlight shell %}
+{% highlight sh %}
 wget http://rmsdl.bluewin.ch/pirelli/Vx226N1_50033.rmt
 {% endhighlight %}
 
@@ -42,7 +41,7 @@ It can also detect different sections in a single archive, which will be very us
 
 Let's start with a very basic analysis:
 
-{% highlight shell %}
+{% highlight sh %}
 binwalk Vx226N1_50033.rmt
 
 DECIMAL       HEXADECIMAL     DESCRIPTION
@@ -55,7 +54,7 @@ So we first have some compressed data and then a compressed kernel ("vmlinux.bin
 Let's extract them into two different files so we can study them more in-depth.
 Once again binwalk is our friend:
 
-{% highlight shell %}
+{% highlight sh %}
 binwalk Vx226N1_50033.rmt -e
 cp _Vx226N1_50033.rmt.extracted/vmlinux.bin .
 {% endhighlight %}
@@ -65,7 +64,7 @@ So now we have a vmlinux, but it turns out it contains other stuff too.
 Let's run binwalk on the extracted image to find out what is in there.
 I deleted some of the output to keep the log short.
 
-{% highlight shell %}
+{% highlight sh %}
 >binwalk vmlinux.bin
 DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
@@ -112,7 +111,7 @@ I will now take a look at what is in /etc.
 For those who don't know, etc is the place where most config files go in UNIX.
 So far I only took a look at the configuration for OpenSSH server (`/etc/ssh/sshd_config`).
 
-{% highlight shell %}
+{% highlight sh %}
 Port 22
 AddressFamily inet
 {% endhighlight %}
@@ -120,7 +119,7 @@ AddressFamily inet
 This only tells us that SSH is listening on every IPv4 adress on port 22 (default).
 The next interesting section gives us some informations about what kind of authentication is allowed :
 
-{% highlight shell %}
+{% highlight sh %}
 PermitRootLogin yes
 RSAAuthentication no
 PubkeyAuthentication no
