@@ -9,7 +9,12 @@ In the end I did not find the huge root-level backdoor I was hoping to find, but
 I published my notes on [https://github.com/antoinealb/swisscom_centro_grande](Github) and got a few emails from fellow hackers trying to replicate my results.
 Now that I have a blog I might as well do an article about it, to have some content online !
 
-**Note:** I am no Linux wizard.
+## Disclaimer 1
+You may break stuff doing those manipulations.
+You follow this at your own risk.
+
+## Disclaimer 2
+I am no Linux wizard.
 I might have skipped interesting things.
 Some parts may even be totally wrong.
 If you find something that should be changed, please tell me so !
@@ -151,5 +156,30 @@ We land in a configuration utility, but I think we can do better...
 
 To get back to normal mode, exit the shell and then run `restore default-setting`.
 The router will reboot into normal mode.
+
+# Conclusion & Future work
+The next step would be "rooting" the device.
+This could be done in a few ways, for example exploiting vulnerabilities in setuid programs.
+The list of such executables can be found on the Github repository.
+
+Another exploit path would be to use a JTAG debugger to get root access.
+This is cheating, but it would definitely be useful to do some debugging or play a bit.
+I ordered a JTAG adapter, so if I have some time when no one depends on the router I will try to do it.
+
+While browsing throught the firmware I read a few things about how USB devices are handled (the router has two USB ports).
+The two device type which are the most interesting to me are device storages and serial adapters.
+Apparently the router can spawn a network share when we plug in a usb key.
+I haven't tested it yet, but it may be vulnerable to symlink traversal for example.
+The serial adapters are also handled, but I am not quite sure of what they do.
+My guess would be that they provide some sort of debug shell.
+I still need to inveestigare here.
+
+This is where I stopped playing the router.
+It is now deployed to my "production", and my family will be very angry if I reverse it now.
+If anyone is interested in replicating those results or going further, I would be very interested to discuss it with you (my email is on Github).
+
+
+
+
 
 
