@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Reverse engineering Swisscom's Centro Grande
+tags: linux
+categories: Reverse Engineering
 ---
 
 Recently Swisscom (Switzerland's biggest ISP) decided to give me a new box (modem + router + hotspot) since the previous one was already 7 years old.
