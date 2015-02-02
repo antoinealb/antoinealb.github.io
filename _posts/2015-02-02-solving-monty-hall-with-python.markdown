@@ -116,9 +116,9 @@ It is a non-ordered collection which guarantees that each stored object is uniqu
 The main advantage of sets is the ability to perform mathematical operations on it.
 
 {% highlight python %}
-set((1,2,3)) + set((3, 4)) # set((1,2,3,4)
-set(1,2,3) - set(2) # set((1, 3))
-set(1,2,3) & set((2, 4)) # set((2))
+{1, 2, 3} + {3, 4} # {1, 2, 3, 4}
+{1, 2, 3} - {2} # {1, 3}
+{1, 2, 3} & {2, 4} # {2}
 {% endhighlight %}
 
 It is very useful when you need a way to compute properties about group of objects without caring about the order.
