@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Solving the Monty Hall problem with Python
-tags: linux
+categories: Programming
 ---
 
 Recently someone on IRC brought up the Monty Hall paradox, and said the conclusion of this was that the probabilities were not always right.
