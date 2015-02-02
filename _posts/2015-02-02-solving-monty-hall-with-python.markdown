@@ -24,24 +24,28 @@ First of all here is the complete code.
 I will go into details aftewards.
 
 {% highlight python %}
-from random import choice
+import random
 
-DOORS = [1,2,3]
+DOORS = {1, 2, 3}
+
+def choice(set):
+    return random.choice(tuple(set))
 
 def choose_new_door(picked, removed_door):
     """
     Changes the door based on the removed door.
     """
-    return list(set(DOORS) - set((picked, removed_door)))[0]
+    possible_door_set = DOORS - {picked, removed_door}
+    return list(possible_door_set)[0]
 
 def pick_removed_door(winning, picked):
     """
     Returns the door that the presenter will remove.
     This door is not the winning door and not the door the player picked.
     """
-    return choice(list(set(DOORS) - set((winning, picked))))
+    return choice(DOORS - {winning, picked})
 
-def compute_proba(change_door, count=1000000):
+def compute_proba(change_door, count=10000):
     """
     Returns the experimental probability of winning.
 
@@ -51,7 +55,7 @@ def compute_proba(change_door, count=1000000):
 
     win_count = 0
 
-    for i in range(count):
+    for _ in range(count):
         player_choice = choice(DOORS)
         winning_choice = choice(DOORS)
 
@@ -67,6 +71,7 @@ def compute_proba(change_door, count=1000000):
 
 print("When changing door the win proba is {}".format(compute_proba(True)))
 print("When keeping the same door the win proba is {}".format(compute_proba(False)))
+
 {% endhighlight %}
 
 Let's start with this function:
