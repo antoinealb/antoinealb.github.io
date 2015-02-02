@@ -84,9 +84,9 @@ If `change_door` is true the player will decide to change its choice of door aft
 Otherwise it will stick to its initial door choice.
 
 {% highlight python %}
-        player_choice = choice(DOORS)
-        winning_choice = choice(DOORS)
-        removed_door = pick_removed_door(winning_choice, player_choice)
+player_choice = choice(DOORS)
+winning_choice = choice(DOORS)
+removed_door = pick_removed_door(winning_choice, player_choice)
 {% endhighlight %}
 
 Here we simply randomly attribuate the winning door and the player choice.
@@ -94,16 +94,16 @@ The host then picks a door to remove.
 This door cannot be the winning door nor the player choice (Python's sets are perfect for this).
 
 {% highlight python %}
-        if change_door:
-            player_choice = choose_new_door(player_choice, removed_door)
+if change_door:
+    player_choice = choose_new_door(player_choice, removed_door)
 {% endhighlight %}
 Here the player changes it's door choice if asked to do so.
 The algorithm for this is easy: simply take the door that is not the initial choice nor the removed one.
 Again we will use Python's sets for this.
 
 {% highlight python %}
-        if player_choice == winning_choice:
-            win_count = win_count + 1
+if player_choice == winning_choice:
+    win_count = win_count + 1
 {% endhighlight %}
 Finally, if the player choice is the correct one we increment the counter and start again.
 
