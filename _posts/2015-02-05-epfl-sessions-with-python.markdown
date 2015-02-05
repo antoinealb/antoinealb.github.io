@@ -18,7 +18,7 @@ import getpass
 
 USER = "GASPAR"
 
-session = tequila.create_tequila_session(USER, getpass())
+session = tequila.create_tequila_session(USER, getpass.getpass())
 page = session.get("http://moodle.epfl.ch").text
 print(page)
 {% endhighlight %}
