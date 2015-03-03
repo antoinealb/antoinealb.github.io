@@ -1,6 +1,6 @@
 ---
 layout: post
-title: My notes on installing Arch for my laptop
+title: My notes on installing Arch Linux on my Lenovo T420s
 tags: linux
 ---
 I recently decided I wanted to reinstall my Arch Linux system.
@@ -113,7 +113,7 @@ It should improve latency, but I am happy as is, so I prefer to stay on tried an
 
 ## Keyboard
 For virtual consoles, `/etc/vconsole.conf`:
-{% highlight shell %}
+{% highlight bash %}
 KEYMAP=fr_CH
 {% endhighlight %}
 
@@ -143,7 +143,7 @@ But for this install, I went a little bit integrist and decided that adding a re
 Fortunately, Yaourt only has a few dependencies, and only one must be installed by hand from the AUR: `package-query`.
 The command to install it is really close to the one used to install yaourt :
 
-{% highlight shell %}
+{% highlight bash %}
 wget https://aur.archlinux.org/packages/ya/yaourt/PKGBUILD
 makepkg
 sudo pacman -U yaourt.xz # replace with name of the ouput file
@@ -167,7 +167,7 @@ I will just list the few software I installed in case I need to do it again.
 Virtualbox required a bit of configuration because it uses some kernel modules.
 You need to put the following in `/etc/modules-load.d/virtualbox.conf`:
 
-{% highlight shell %}
+{% highlight bash %}
 # VirtualBox modules
 vboxdrv
 vboxnetadp
@@ -189,7 +189,7 @@ To save some power I disabled Bluetooth completely since I was not using it.
 
 Put the following in `/etc/modprobe/modprobe.conf` :
 
-{% highlight shell %}
+{% highlight bash %}
 # disable bluetooth to save power
 blacklist btusb
 blacklist bluetooth
@@ -277,7 +277,7 @@ I decided to use GDM because it is very well integrated and lightweight enough.
 It is already in `gnome-extra`, so you only need to run `systemctl enable gdm.service`.
 
 ## XMonad
-{% highlight shell %}
+{% highlight bash %}
 yaourt -S xmonad xmonad-contrib xmonad-gnome3 dmenu
 {% endhighlight %}
 The config files are hosted in Git so they will be easy to retrieve.
@@ -294,7 +294,7 @@ I don't use it a lot (it may change if I do some OpenGL).
 
 We simply install `bbswitch` and then put the following in `/etc/modprobe/modprobe.conf` :
 
-{% highlight shell %}
+{% highlight bash %}
 # disable NVidia card at boot
 options bbswitch load_state=0 unload_state=0
 {% endhighlight %}
@@ -308,7 +308,7 @@ TBD
 
 ## Backup solution
 Still to be done, but something in the spirit of :
-{% highlight shell %}
+{% highlight bash %}
 rsync -aAXv /home/antoine/ /path/to/backup/
 {% endhighlight %}
 
