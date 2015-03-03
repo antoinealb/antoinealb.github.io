@@ -20,7 +20,8 @@ Plus it is supported (well sort of) by Hubot, which is our toy of choice.
 So after toying with it using the Vagrant image available on the website, I decided to start a new VPS and install it for a real world test.
 
 # Installing dependencies
-## NodeJS
+
+## Node.js
 Installing Node.js is really easy, as there is a PPA (Personal Package Archive) available.
 We will also need the `build-essential` package, since some NPM modules need to be compiled.
 {% highlight bash %}
