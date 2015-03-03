@@ -102,7 +102,7 @@ It allows us to write job descriptions and when they should be run.
 We can also specify a user and a directory to run the script from.
 
 Put the following in `/etc/init/lets-chat.conf`:
-{% highlight conf %}
+{% highlight bash %}
 description "Let's chat application server"
 author "Antoine Albertelli"
 
