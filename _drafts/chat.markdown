@@ -1,0 +1,90 @@
+# Installing let's chat
+
+*Write some introduction about why let's chat is so cool.*
+
+# Installing dependencies
+## NodeJS
+Installing Node.js is really easy, as there is a PPA (Personal Package Archive) available.
+We will also need the `build-essential` package, since some NPM modules need to be compiled.
+{% highlight bash %}
+# Adds the Node.js PPA
+curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-get install nodejs build-essential
+{% endhighlight %}
+
+## MongoDB
+There is a package available:
+{% highlight bash %}
+sudo apt-get install mongodb-org
+{% endhighlight %}
+
+## Python
+Python 2.7 is already installed with Ubuntu 12.04, there is no need to install anything.
+
+# Installing Let's Chat
+For security reason, we will run Let's Chat as its own user, with restricted privileges.
+First create this user:
+{% highlight bash %}
+adduser node
+{% endhighlight %}
+
+Then as the `node` user, run the following commands to install Let's Chat:
+
+{% highlight bash %}
+https://github.com/sdelements/lets-chat
+cd lets-chat
+npm install
+{% endhighlight %}
+
+## Configuration
+Let's chat settings are stored in `settings.yaml`.
+There is a sample available and here is mine, slightly adapted from it:
+
+{% highlight yaml %}
+# See defaults.yml for all available options
+
+env: production
+
+http:
+  enable: true
+  host: '0.0.0.0'
+  port: 5000
+
+# Allow any file upload
+files:
+  enable: true
+  restrictTypes: true
+
+auth:
+  local:
+    salt: SALTSARESECRET
+
+secrets:
+  cookie: ITISASALTTOO
+{% endhighlight %}
+
+You can now run `npm start` and point your browser on your server (port 5000 for now, we will fix it in the next step).
+
+# Serving the site on port 80
+Since we are running the web application with a non priviledged user, as you should be, we cannot bind to port 80.
+Recent Linux kernels can change this using a per-program authorization
+Since our program is interpreted by the `node` executable, it would mean any Node.js application could bind to lower ports, which is not ideal.
+
+The solution that I choose is to run the server on a non priviledged port and redirect traffic coming on port 80 to this port using Linux's builtin `iptables`.
+
+To do this, simply run the following commands as root:
+{% highlight bash %}
+iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-port 5000
+iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 5000
+{% endhighlight %}
+
+# TODO
+* Support for HTTPS (using self signed certificate).
+
+
+# References
+* Let's chat's README
+* Node.js website
+* MongoDB website
+* iptables redirection: http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/
+
