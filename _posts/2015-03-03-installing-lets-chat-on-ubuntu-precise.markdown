@@ -1,6 +1,23 @@
-# Installing let's chat
+---
+title: Installing Let's chat on Ubuntu 12.04
+layout: post
+categories: System administration
+tags: linux web
+---
+Recently we started using IRC to communicate between colleagues.
+IRC was fine, except that the user experience isn't so good compared to modern chat clients.
+You lack notifications, inline images and it is not specially user friendly.
+A nice alternative targeting entreprises was [https://campfirenow.com/](Campfire), but sadly it is a closed source product.
+I forgot about it for a while, then stumbled upon [http://sdelements.github.io/lets-chat/](Let's chat), which is described by its authors as
 
-*Write some introduction about why let's chat is so cool.*
+> Let's Chat is a persistent messaging application that runs on Node.js and MongoDB. It's designed to be easily deployable and fits well with small, intimate teams.
+>
+> It's free (MIT licensed) and ships with killer features such as LDAP/Kerberos authentication, a REST-like API and XMPP support.
+>
+> Let's Chat is a side-project of the development team at Security Compass. (A real life 10% time project!)
+
+Plus it is supported (well sort of) by Hubot, which is our toy of choice.
+So after toying with it using the Vagrant image available on the website, I decided to start a new VPS and install it for a real world test.
 
 # Installing dependencies
 ## NodeJS
