@@ -131,9 +131,9 @@ Your service will be started automatically on every boot.
 
 
 # References
-* Let's chat's README
-* Node.js website
-* MongoDB website
-* iptables redirection: http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/
-* Ubuntu's Upstart cookbook: http://upstart.ubuntu.com/cookbook/
+* [https://github.com/sdelements/lets-chat/blob/master/README.md](Let's chat's README)
+* [https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions](Node.js Ubuntu install guide)
+* [http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/](MongoDB website)
+* [http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/](iptables redirection tutorial)
+* [http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/](Ubuntu's Upstart cookbook)
 
