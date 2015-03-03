@@ -84,10 +84,10 @@ To do that we can use Ubuntu's Upstart init system.
 It allows us to write job descriptions and when they should be run.
 We can also specify a user and a directory to run the script from.
 
-Put the following in `/etc/init/letschat.conf`:
+Put the following in `/etc/init/lets-chat.conf`:
 {% highlight conf %}
 description "Let's chat application server"
-author "Antoine Albertelli <antoinea101@gmail.com>"
+author "Antoine Albertelli"
 
 # Taken from nginx job definition
 start on (filesystem and net-device-up IFACE=lo)
