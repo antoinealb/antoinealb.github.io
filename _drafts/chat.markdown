@@ -78,8 +78,34 @@ iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-port 5000
 iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 5000
 {% endhighlight %}
 
+# Running the site as an Ubuntu service
+Running the site with `npm start` is great, but it would be better if it is started automatically at boot.
+To do that we can use Ubuntu's Upstart init system.
+It allows us to write job descriptions and when they should be run.
+We can also specify a user and a directory to run the script from.
+
+Put the following in `/etc/init/letschat.conf`:
+{% highlight conf %}
+description "Let's chat application server"
+author "Antoine Albertelli <antoinea101@gmail.com>"
+
+# Taken from nginx job definition
+start on (filesystem and net-device-up IFACE=lo)
+stop on runlevel [!2345]
+
+setuid node
+setgid node
+
+chdir /home/node/lets-chat
+
+exec npm start
+{% endhighlight %}
+Tadaa ! Now you can run `sudo initctl start lets-chat` and your job will be started on every boot.
+
+
 # TODO
 * Support for HTTPS (using self signed certificate).
+* Add automatic respawn.
 
 
 # References
@@ -87,4 +113,5 @@ iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 
 * Node.js website
 * MongoDB website
 * iptables redirection: http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/
+* Ubuntu's Upstart cookbook: http://upstart.ubuntu.com/cookbook/
 
