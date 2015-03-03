@@ -7,8 +7,8 @@ tags: linux web
 Recently we started using IRC to communicate between colleagues.
 IRC was fine, except that the user experience isn't so good compared to modern chat clients.
 You lack notifications, inline images and it is not specially user friendly.
-A nice alternative targeting entreprises was [https://campfirenow.com/](Campfire), but sadly it is a closed source product.
-I forgot about it for a while, then stumbled upon [http://sdelements.github.io/lets-chat/](Let's chat), which is described by its authors as
+A nice alternative targeting entreprises was [Campfire](https://campfirenow.com/), but sadly it is a closed source product.
+I forgot about it for a while, then stumbled upon [Let's chat](http://sdelements.github.io/lets-chat/), which is described by its authors as
 
 > Let's Chat is a persistent messaging application that runs on Node.js and MongoDB. It's designed to be easily deployable and fits well with small, intimate teams.
 >
@@ -132,9 +132,9 @@ Your service will be started automatically on every boot.
 
 
 # References
-* [https://github.com/sdelements/lets-chat/blob/master/README.md](Let's chat's README)
-* [https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions](Node.js Ubuntu install guide)
-* [http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/](MongoDB website)
-* [http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/](iptables redirection tutorial)
-* [http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/](Ubuntu's Upstart cookbook)
+* [Let's chat's README](https://github.com/sdelements/lets-chat/blob/master/README.md)
+* [Node.js Ubuntu install guide](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions)
+* [MongoDB website](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
+* [iptables redirection tutorial](http://www.catonmat.net/blog/unprivileged-programs-privileged-ports/)
+* [Ubuntu's Upstart cookbook](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
 
