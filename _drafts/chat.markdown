@@ -78,7 +78,7 @@ iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-port 5000
 iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 5000
 {% endhighlight %}
 
-# Running the site as an Ubuntu service
+# Running the site on server boot
 Running the site with `npm start` is great, but it would be better if it is started automatically at boot.
 To do that we can use Ubuntu's Upstart init system.
 It allows us to write job descriptions and when they should be run.
@@ -100,7 +100,12 @@ chdir /home/node/lets-chat
 
 exec npm start
 {% endhighlight %}
-Tadaa ! Now you can run `sudo initctl start lets-chat` and your job will be started on every boot.
+
+We also need to make our iptables rules persistent on every reboot.
+To do this put the `iptables` commands above in `/etc/rc.local`, before the last line.
+
+Tadaa ! Now you can run `sudo initctl start lets-chat` and try to connect to your host on port 80.
+Your service will be started automatically on every boot.
 
 
 # TODO
