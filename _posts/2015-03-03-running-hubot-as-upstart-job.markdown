@@ -1,5 +1,5 @@
 ---
-title: Runing Github's Hubot as Upstart job
+title: Running Github's Hubot as Upstart job
 layout: post
 categories: "System administration"
 tags: linux
