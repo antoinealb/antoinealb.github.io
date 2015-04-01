@@ -1,3 +1,4 @@
+sudo: false # use docker
 language: ruby
 rvm:
     - 2.1.0
