@@ -93,6 +93,12 @@ article{
     text-align:justify;
 }
 
+/* Center images in article body. */
+.article_body img {
+    display: block;
+    margin: auto;
+}
+
 .post-date {
 	text-transform: uppercase;
 	font-size: 14px;
