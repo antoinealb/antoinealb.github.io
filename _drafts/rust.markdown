@@ -31,5 +31,36 @@ mkdir libcore-thumbv7m
 rustc -C opt-level=2 -Z no-landing-pads --target thumbv7m-none-eabi -g rust/src/libcore/lib.rs --out-dir libcore-thumbv7m
 {% endhighlight %}
 
+# Provide needed runtime
+For this little example I will reuse the runtime I build for my Tivaware template before.
+We will only need a few more functions needed by the Rust runtime, mostly for panic functions.
+
+Put the following in `runtime.rs`:
+
+
+{% highlight rust %}
+#![no_std]
+#![crate_type="staticlib"]
+#![feature(lang_items)]
+
+extern crate core;
+
+#[lang="stack_exhausted"] extern fn stack_exhausted() {}
+#[lang="eh_personality"] extern fn eh_personality() {}
+#[lang="panic_fmt"]
+pub fn panic_fmt(_fmt: &core::fmt::Arguments, _file_line: &(&'static str, usize)) -> !
+{
+    loop { }
+}
+
+#[no_mangle]
+pub unsafe fn __aeabi_unwind_cpp_pr0() -> ()
+{
+    loop {}
+}
+{% endhighlight %}
+
+
+
 Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
