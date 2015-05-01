@@ -72,9 +72,9 @@ rustc -C opt-level=2 -Z no-landing-pads --target thumbv7em-none-eabi -g --emit o
 file runtime.o # Check that the file was compiled for ARM
 {% endhighlight %}
 
-# Adding Rust support to the Makefile
-Basically that was pretty easy, I only added a rule to compile Rust code.
-You can see the relevant commit here: _XXX_
+We can now add Rust support to the Makefile.
+You can see how I did it in [my commit](https://github.com/antoinealb/rust-demo-cortex-m4/commit/033a80ea998267cca27eac75cfd0b2bac132febd).
+
 
 # Porting our main function to Rust
 
