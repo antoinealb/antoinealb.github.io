@@ -10,7 +10,7 @@ To do this, I decided to write a little demo application using Rust on a Texas I
 
 # Install native rustc
 Nothing special here, just don't use the beta version, as we will use some unstable features.
-I installed latest Rust nightly on OSX via the following commands
+I installed latest Rust nightly on OSX via the following commands:
 {% highlight bash %}
 brew tap cheba/rust-nightly
 brew install rust-nightly
