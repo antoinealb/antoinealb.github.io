@@ -1,26 +1,31 @@
 # Install native rustc
-On OSX, using Homebrew: `brew install rust`
+Nothing special here, just don't use the beta version, as we will use some unstable features.
+I installed latest Rust nightly on OSX via the following commands
+{% highlight bash %}
+brew tap cheba/rust-nightly
+brew install rust-nightly
+{% endhighlight %}
 
 # Download rust target description
 This file is needed to tell Rust/LLVM about our Cortex M4 CPU, it's pointer size and so on.
 We will use the one from the Zync project:
 
 {% highlight bash %}
-wget "https://github.com/hackndev/zinc/blob/master/support/target-specs/thumbv7em-none-eabi.json" -O thumbv7em-none-eabi
+wget "https://raw.githubusercontent.com/hackndev/zinc/master/support/target-specs/thumbv7em-none-eabi.json" -O thumbv7em-none-eabi
 {% endhighlight %}
 
 # Building libcore
 Libcore provides the most fundamental data types and functions supported by Rust.
 You can read more about it in [the documentation](https://doc.rust-lang.org/core/index.html).
 Since it is really the foundation of the compiler's result, they must have the same version, down to the commit.
-I used Rust beta, but you can check which version of `rustc` you have on your computer by running `rustc --version -v` and looking for the commit-hash field.
+You can check which version of `rustc` you have on your computer by running `rustc --version -v` and looking for the commit-hash field.
 
 First download the correct version of Rust's source code:
 
 {% highlight bash %}
 git clone https://github.com/rust-lang/rust
 cd rust
-git checkout 1.0.0-beta # replace the tag by your commit hash if necessary
+git checkout $HASH
 cd ..
 {% endhighlight %}
 
@@ -36,7 +41,6 @@ For this little example I will reuse the runtime I build for my Tivaware templat
 We will only need a few more functions needed by the Rust runtime, mostly for panic functions.
 
 Put the following in `runtime.rs`:
-
 
 {% highlight rust %}
 #![no_std]
@@ -59,6 +63,20 @@ pub unsafe fn __aeabi_unwind_cpp_pr0() -> ()
     loop {}
 }
 {% endhighlight %}
+
+You can now try compiling this first Rust file for ARM by running the following commands:
+
+{% highlight bash %}
+rustc -C opt-level=2 -Z no-landing-pads --target thumbv7em-none-eabi -g --emit obj -L libcore-thumbv7m -o runtime.o runtime.rs
+
+file runtime.o # Check that the file was compiled for ARM
+{% endhighlight %}
+
+# Adding Rust support to the Makefile
+Basically that was pretty easy, I only added a rule to compile Rust code.
+You can see the relevant commit here: _XXX_
+
+# Porting our main function to Rust
 
 
 
