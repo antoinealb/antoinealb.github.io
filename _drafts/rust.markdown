@@ -269,12 +269,11 @@ fn clock_init() {
 Just run `make all load` and the LED will start blinking! The complete project is available on [Github](https://github.com/antoinealb/rust-demo-cortex-m4).
 
 # What's next ?
-* IRQs
-* Bindings to RTOS (ChibiOS)
-* More type safety, for example in GPIOs and config
+This was just a basic experiment with Rust and ARM microcontrollers.
+I started working on interrupts and bindings to ChibiOS.
+I also would like to design safer APIs instead of simply translating the code to Rust.
 
-
-Sources:
+# Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
 * https://doc.rust-lang.org/core/
 * StackOverflow, as always
