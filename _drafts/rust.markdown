@@ -1,3 +1,13 @@
+---
+layout: post
+title: Rust bare metal on ARM microcontroller
+categories: Programming
+tags: rust
+---
+Recently at the CVRA we decided to rewrite one important external library writen in C++.
+We wanted to rewrite in C, but since Rust recently hit beta I wanted to see if it was feasible to use it for our application.
+To do this, I decided to write a little demo application using Rust on a Texas Instruments Tiva Launchpad dev board.
+
 # Install native rustc
 Nothing special here, just don't use the beta version, as we will use some unstable features.
 I installed latest Rust nightly on OSX via the following commands
@@ -276,4 +286,5 @@ I also would like to design safer APIs instead of simply translating the code to
 # Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
 * https://doc.rust-lang.org/core/
+* [My previous post about Stellaris](http://antoinealb.net/programming/2014/04/21/stellaris-linux.html)
 * StackOverflow, as always
