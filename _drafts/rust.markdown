@@ -73,10 +73,20 @@ file runtime.o # Check that the file was compiled for ARM
 {% endhighlight %}
 
 We can now add Rust support to the Makefile.
+This is just adding a rule to make `.o` object file from `.rs` source using the Rust compiler with the above flags.
 You can see how I did it in [my commit](https://github.com/antoinealb/rust-demo-cortex-m4/commit/033a80ea998267cca27eac75cfd0b2bac132febd).
 
+*Note:* We don't need to compile each of our Rust file on it's own.
+All I had to do was build `main.rs` and "include" the other files with `mod` directives.
+This was a bit surprising at first and caused me quite some problems.
 
 # Porting our main function to Rust
+
+
+# Final project
+The complete project is available on [Github](https://github.com/antoinealb/rust-demo-cortex-m4).
+I implemented a driver for the clock subsystem and made a blinking LED demo.
+The interrupt driver for the systick handler doesn't work yet, I am working on it.
 
 
 
