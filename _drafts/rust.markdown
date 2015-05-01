@@ -81,14 +81,200 @@ All I had to do was build `main.rs` and "include" the other files with `mod` dir
 This was a bit surprising at first and caused me quite some problems.
 
 # Porting our main function to Rust
+My objective was reimplementing the "Hello, world" of embedded systems: blinking a LED.
+Basically this requires three things:
+
+1. Clock setup.
+2. General Purpose Input / Output setup.
+3. GPIO writing in a main loop.
+
+All of this is usually done using either direct register access or a library.
+As I said I am very interested by Rust's compatibility with C, so I decided to use Texas Instruments' Tivaware, which is a very basic library to deal with low level hardware settings.
+
+I only wrote bindings for what I used, since I probably won't use Tivaware for my more "real" projects (we don't use Texas Instruments chips, but STM32).
+
+## Sysctl binding
+The `SysCtl` subsystem as its name implies is related to system control, like clock, peripherals and interrupts.
+For this project I only need two Tivaware functions, `SysCtlClockSet` to configure system oscillator and `SysCtlPeripheralEnable` to enable the GPIO port on which my LED is connected.
+I will also need a few constants.
+
+My particular board has an external crystal at 16 Mhz.
+I will use the PLL to rise it up to 400 Mhz, then divide it by 5 to have 80 Mhz, which is the max speed of this particular microcontroller.
+
+From my previous article on Tivaware, I knew that this required the following constants: `SYSCTL_SYSDIV_2_5`, `SYSCTL_USE_PLL`, `SYSCTL_XTAL_16MHZ` and `SYSCTL_OSC_MAIN`.
+We can get the value of those constants by opening Tivaware's `sysctl.h`.
+Since we are here, we will also lookup the value of `SYSCTL_PERIPH_GPIOF`, which we will need to turn on the LED.
+We can put them as public constants in `sysctl.rs`:
+{% highlight rust %}
+/* Sysctl.rs */
+pub const SYSCTL_SYSDIV_2_5       : u32 = 0xC1000000;  // Processor clock is pll / 2.5
+pub const SYSCTL_USE_PLL          : u32 = 0x00000000;  // System clock is the PLL clock
+pub const SYSCTL_XTAL_16MHZ       : u32 = 0x00000540;  // External crystal is 16 MHz
+pub const SYSCTL_OSC_MAIN         : u32 = 0x00000000;  // Osc source is main osc
+pub const SYSCTL_PERIPH_GPIOF     : u32 = 0xf0000805;  // GPIO F
+{% endhighlight %}
+
+The functions binding are not very complicated.
+You just declare them as `extern` and you can then call them from unsafe blocks.
+I will also write safe wrappers around them for ease of use.
+Since Rust functions are module private by default, we don't have to worry about someone directly using the C functions incorrectly.
+
+{% highlight rust %}
+// sysctl.rs
+extern {
+    fn SysCtlClockSet(config: u32);
+    fn SysCtlPeripheralEnable(peripheral: u32);
+}
+
+pub fn clock_set(config: u32)
+{
+    unsafe {
+        SysCtlClockSet(config);
+    }
+}
+
+pub fn peripheral_enable(peripheral: u32)
+{
+    unsafe {
+        SysCtlPeripheralEnable(peripheral);
+    }
+}
+{% endhighlight %}
+
+## GPIO bindings
+I applied the same process as before, but later reworked it to have a bit more type safety.
+By using `u32` directly like in the sysctl module, we gain little to nothing over C, so I decided that for the GPIO driver I will use custom types for ports and pins.
+I will just put the different constants in enumerations and use those enumerations in my public API.
+Here is the code:
+{% highlight rust %}
+// gpio.rs
+#![allow(dead_code)]
+
+pub enum Port {
+    PortF = 0x40025000,
+}
+
+pub enum Pin {
+    Pin0 = (1 << 0),
+    Pin1 = (1 << 1),
+    Pin2 = (1 << 2),
+    Pin3 = (1 << 3),
+    Pin4 = (1 << 4),
+    Pin5 = (1 << 5),
+    Pin6 = (1 << 6),
+    Pin7 = (1 << 7),
+}
+
+extern {
+    fn GPIOPinTypeGPIOOutput(base: *const u32, mask: u32);
+    fn GPIOPinWrite(base: *const u32, mask: u32, value: u32);
+}
+
+pub fn make_output(port: Port, pin: Pin) {
+    let mask = pin as u32;
+    let base = port as u32;
+    unsafe {
+        GPIOPinTypeGPIOOutput(base as *const u32, mask);
+    }
+}
+
+pub fn write(port: Port, pin: Pin, value: bool) {
+    let base = port as u32;
+    let shifted_val = pin as u32;
+    unsafe {
+        if value {
+            GPIOPinWrite(base as *const u32, shifted_val, shifted_val);
+        } else {
+            GPIOPinWrite(base as *const u32, shifted_val, 0);
+        }
+    }
+}
+{% endhighlight %}
+
+# Putting it together
+First we write a simple LED driver to hide the hardware details from main.
+This driver needs to configure a given pin as output, enable the port on which the led is connected and provide functions to set the LED state.
+
+{% highlight rust %}
+// led_driver.rs
+use sysctl;
+use gpio;
+use gpio::Pin;
+
+pub const RED: Pin = Pin::Pin1;
+pub const BLUE: Pin = Pin::Pin2;
+
+pub fn led_init() {
+    sysctl::peripheral_enable(sysctl::SYSCTL_PERIPH_GPIOF);
+    gpio::make_output(gpio::Port::PortF, RED);
+    gpio::make_output(gpio::Port::PortF, BLUE);
+}
+
+pub fn set_red(state: bool) {
+    gpio::write(gpio::Port::PortF, RED, state);
+}
+
+pub fn set_blue(state: bool) {
+    gpio::write(gpio::Port::PortF, BLUE, state);
+}
+{% endhighlight %}
+
+And finally the main, which just a loop doing busy wait.
+I had to add a few statements to remove the standard library and allow bare metal Rust (mostly taken from my references).
+
+{% highlight rust %}
+#![feature(no_std)]
+#![feature(core)]
+#![feature(lang_items)]
+#![no_std]
+
+#![crate_type="staticlib"]
+
+extern crate core;
+
+mod runtime;
+mod sysctl;
+mod led_driver;
+mod gpio;
+
+fn clock_init() {
+    let clock_config = sysctl::SYSCTL_SYSDIV_2_5 + sysctl::SYSCTL_USE_PLL +
+                       sysctl::SYSCTL_XTAL_16MHZ + sysctl::SYSCTL_OSC_MAIN;
+    sysctl::clock_set(clock_config);
+}
 
 
-# Final project
-The complete project is available on [Github](https://github.com/antoinealb/rust-demo-cortex-m4).
-I implemented a driver for the clock subsystem and made a blinking LED demo.
-The interrupt driver for the systick handler doesn't work yet, I am working on it.
+#[no_mangle] pub fn main()
+{
+    clock_init();
+    led_driver::led_init();
 
+    loop {
+        let mut i = 0;
+        while i < 1000000 {
+            i += 1;
+            led_driver::set_red(false);
+        }
+
+        i = 0;
+
+        while i < 1000000 {
+            i += 1;
+            led_driver::set_red(true);
+        }
+    }
+}
+{% endhighlight %}
+
+Just run `make all load` and the LED will start blinking! The complete project is available on [Github](https://github.com/antoinealb/rust-demo-cortex-m4).
+
+# What's next ?
+* IRQs
+* Bindings to RTOS (ChibiOS)
+* More type safety, for example in GPIOs and config
 
 
 Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
+* https://doc.rust-lang.org/core/
+* StackOverflow, as always
