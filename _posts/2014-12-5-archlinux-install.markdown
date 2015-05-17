@@ -271,6 +271,7 @@ Transmission is really the best client out there to download your favorite Linux
 Nmap is really useful for network diagnosis, so let's install it as well.
 
 # Desktop environment
+
 ## Gnome 3
 Very easy, just do `pacman -S gnome gnome-extra`.
 I decided to use GDM because it is very well integrated and lightweight enough.
