@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Using BusBlaster v3/v4 on OSX
-categories: System
+categories:
+    - System administration
 ---
 
 I recently got myself a Macbook Pro as my main laptop.
