@@ -1,7 +1,8 @@
 ---
 title: Installing Let's chat on Ubuntu 12.04
 layout: post
-categories: System administration
+categories:
+    - System administration
 tags: linux web
 ---
 Recently we started using IRC to communicate between colleagues.

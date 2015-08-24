@@ -1,7 +1,8 @@
 ---
 title: Running Github's Hubot as Upstart job
 layout: post
-categories: "System administration"
+categories:
+    - System administration
 tags: linux
 ---
 In this post I just want to explain how to run [Github's Hubot](https://hubot.github.com/) automatically using Ubuntu.
