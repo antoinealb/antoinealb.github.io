@@ -283,6 +283,10 @@ This was just a basic experiment with Rust and ARM microcontrollers.
 I started working on interrupts and bindings to ChibiOS.
 I also would like to design safer APIs instead of simply translating the code to Rust.
 
+*Update:* A friend of mine [@nuft](http://nuft.github.io) has done this work.
+It is now possible to write ChibiOS threads in Rust.
+His work can be found in the `chibi-rust` branch of the repository.
+
 # Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
 * https://doc.rust-lang.org/core/
