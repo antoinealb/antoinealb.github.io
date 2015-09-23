@@ -1,34 +1,19 @@
-dbyll
-=====
+# antoinealb.github.io
 
-Open source stylish, minimalistic theme for jekyll.  
-Demo: http://dbtek.github.io/dbyll/
+The orinal theme is [dbyll by dbtek](https://github.com/dbtek/dbyll).
+It is released under the MIT license.
 
-## New
-Dbyll for Ghost is now available. Get it [here](https://github.com/dbtek/dbyll-ghost) now.
+## Install dev tools
 
-### Features
-- Responsive layout.
-- Supports tags and categories.
-- Social profile and bio of author.
-- Bootstrap based.
-- Glyphicon and Font-Awesome Icons.
-- Pagination.
-- Syntax highlighting with pygments.
-- Disqus comments.
+The only external requirement is Ruby>=2.0 and the `bundler` Gem (can be installed via `gem install bundler`).
+To install all other needed tools by running `bundle install --path vendor --binstubs`.
 
+## Running the site locally
 
-### Download
-* [Download dbyll](https://github.com/dbtek/dbyll/archive/master.zip)
+```bash
+# Normal version
+./bin/jekyll serve
 
-### Screenshots
-
-![dbyll-screenshot](	assets/media/dbyll-ss.png)
-
-### License
-- [MIT](http://opensource.org/licenses/MIT)
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dbtek/dbyll/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+# With drafts posts
+./bin/jekyll serve --drafts
+```
