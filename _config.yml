@@ -28,3 +28,6 @@ categories_path: categories.html
 tags_path: tags.html
 
 BASE_PATH:
+
+# Exclude our ruby stuff
+exclude: [.bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_website.yml, .last_optimized]
