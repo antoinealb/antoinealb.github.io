@@ -62,9 +62,7 @@ All developers must use virtual environments to isolate their code from the syst
 This problem can be reduced by using virtualenvs (easy) or Docker (much harder).
 
 
-# Solutions
-
-## Dev problems solution: Put all the PC/ROS code in one repository
+# Solution
 
 As an experiment I suggest merging all the repositories containing software intended to run on the PC (with ROS) as a single repo.
 External dependencies or custom stable libraries would still be installed via virtualenv (automated with a script).
@@ -78,29 +76,12 @@ I suggest not to merge together the firmware repositories written in C for now.
 Currently the development workflow suffers much less from the problems explained above than the Python one.
 Repository explosion is pretty limited and most submodules are either vendor code or shared libraries.
 Build and testing complexity is already handled by our own custom tool called `packager.py` which can generate Makefiles from a dependency tree.
-Deployment workflow is also much simpler: 1. build ELF file on developper machine, 2. send it via SSH on the robot and 3. flash it from there (using OpenOCD or our custom bootloader).
+Deployment workflow is also much simpler and already solved: application binary is built on dev laptop, copied to the robot then flashed.
 Finally, merging only code running on the embedded PC brings limits the risks associated with this kind of methodology changes.
 
-## Docker
-If some of you don't know what Docker is, let me quote the official Docker website:
+## Counter arguments
 
-> Docker containers wrap up a piece of software in a complete filesystem that contains everything it needs to run: code, runtime, system tools, system libraries – anything you can install on a server.
-> This guarantees that it will always run the same, regardless of the environment it is running in.
-
-
-* Define docker
-* Docker is only a part of a solution
-* Could replace virtualenvs to solve dependency leaks
-* Also solves (in a very ugly way) the deployment problem: prepare the docker container, ship it to the robot and run it there.
-    Will take a ton of time.
-* Doesn't solve other the main aspects of the problem
-* You are essentially deploying a big binary of your application so things like architecture compatibility between build machine and deploy target are now a problem.
-* Might bring its own set of problems
-* Definitely something to keep in mind.
-    Plus I think it is cool tech.
-
-
-# Con: Harder to open source / reuse
+###Con: Harder to open source / reuse*
 Totally true. However:
 
 two kinds of components:
@@ -115,15 +96,52 @@ The motor boards, for example are also pretty standalone.
 Why bother with making the second category easy to reuse ?
 Make it easy to *use* first.
 
-# Peudo-con: It will make code more tightly coupled
+###Peudo-con: It will make code more tightly coupled
+
 * Might be true
 * Counterargument: easier to refactor, easier to review
 * Cultural problems require cultural solutions: code review, etc.
 
-# Current approach: design by interface / contract
+###Current approach: design by interface / contract
+
 * Totally better in theory.
 * Doesn't take time into account
 * Stuff doesn't work until both sides of the contract / interfaces are written
 * Assumes contract is respected: not always the case
 * Huge bias to like system engineering in the team: promotes paralysis by over-analysis.
+
+
+# Deployment workflow
+
+*TODO*
+
+## Virtualenv deploys
+
+*TODO*
+
+A more lightweight approach is to use Git to copy the code to the robot and create virtual environment there to hold all pythons dependencies.
+This approach leaks more dependencies than the Docker one but is also much simpler to put together.
+
+
+## What about Docker?
+If some of you don't know what Docker is, let me quote the official Docker website:
+
+> Docker containers wrap up a piece of software in a complete filesystem that contains everything it needs to run: code, runtime, system tools, system libraries – anything you can install on a server.
+> This guarantees that it will always run the same, regardless of the environment it is running in.
+
+Basically it is a kind of lightweight virtual machines called containers, based on a Linux technology called LXC.
+Although it requires Linux to run, you can develop on any platform using a small virtual machine called boot2docker.
+For a wider introduction to Docker, I suggest you watch the talk [Demistifying Docker by Andrew T. Baker](https://www.youtube.com/watch?v=GVVtR_hrdKI).
+
+In our situation Docker could be used like this: 1. The application is packaged on the developper laptop along with all its dependencies. 2. The tests are run in the packaged app and deployement aborts if the tests fail. 3. The packaged application is exported and copied to the robot. 4. The packaged application is run on the robot.
+This looks a lot like our workflow for the microcontrollers programs except that instead of binaries we copy a container image.
+
+I think Docker is a really interesting technology and that I definitely need to take some time to put it in a serious project.
+However it only solves our operation problems and not in a very lightweight way: a simple docker image with python weights around 50M (with a stripped down image).
+
+* Could replace virtualenvs to solve dependency leaks
+* You are essentially deploying a big binary of your application so things like architecture compatibility between build machine and deploy target are now a problem.
+
+Finally, Docker is a new technology and no team member is familiar with it.
+
 
