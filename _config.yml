@@ -5,14 +5,6 @@ paginate_path: "page:num"
 highlighter: pygments
 markdown: redcarpet
 
-domain_name: 'http://antoinealb.net'
-
-defaults:
-  -
-    scope:
-      path: "" # empty string for all files
-    values:
-      title: Antoine's blog
 
 name: Antoinealb's blog
 description: A blog about robotics, embedded software and Linux
