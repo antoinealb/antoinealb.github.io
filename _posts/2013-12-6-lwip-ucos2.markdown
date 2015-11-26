@@ -32,7 +32,7 @@ What finally decided towards UC/OS-II was the fact that there was a commercial p
 
 
 Now that we know what operating system will run our lwIP port, we can start searching for some documentation about the porting process.
-The main sources of information regarding the process of porting lwIP to a new system are the [http://lwip.wikia.com/wiki/Porting_for_an_OS](Porting guide), `doc/sys_arch.txt` in the lwIP source tree and finally, the comments in the source itself.
+The main sources of information regarding the process of porting lwIP to a new system are the [Porting guide](http://lwip.wikia.com/wiki/Porting_for_an_OS), `doc/sys_arch.txt` in the lwIP source tree and finally, the comments in the source itself.
 After a bit of reading, we know that we will have to provide three files :
 
 * `cc.h` This file is responsible to provide various typedef's and informations about the target compiler / CPU.
