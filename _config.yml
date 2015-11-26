@@ -10,7 +10,7 @@ name: Antoinealb's blog
 description: A blog about robotics, embedded software and Linux
 
 author:
-  name: Antoine Albertelli
+  name: Antoine
   email: antoinea101@gmail.com
   github: antoinealb
   twitter: antoinealb
@@ -24,4 +24,3 @@ exclude: [README.md .bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_we
 
 # Details for the RSS feed generator
 url: 'http://antoinealb.net'
-author: 'Antoine'
