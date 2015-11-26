@@ -1,7 +1,19 @@
 # antoinealb.github.io
 
-The orinal theme is [dbyll by dbtek](https://github.com/dbtek/dbyll).
+## Kasper theme
+
+This is a port of Ghost's default theme [Casper](https://github.com/tryghost/casper) for Jekyll.
+Feel free to fork, change, modify and re-use it.
 It is released under the MIT license.
+
+Kasper theme includes:
+
+* Pagination
+* Rss
+* Google Analytics Tracking code
+* Code Syntax Highlight
+* Author's profile with picture
+* Disqus comments
 
 ## Install dev tools
 
