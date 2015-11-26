@@ -5,8 +5,7 @@ paginate_path: "page:num"
 highlighter: pygments
 markdown: redcarpet
 
-
-name: Antoinealb's blog
+name: "[ antoinealb.net ]"
 description: A blog about robotics, embedded software and Linux
 
 author:
