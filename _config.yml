@@ -29,7 +29,6 @@ logo: false
 
 # Exclude our ruby stuff
 exclude: [README.md .bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_website.yml, .last_optimized]
-google_analytics: 'UA-XXXXXXXX-X'
 
 # Details for the RSS feed generator
 url: 'http://antoinealb.net'
