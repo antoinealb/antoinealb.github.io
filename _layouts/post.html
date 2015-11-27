@@ -73,6 +73,10 @@ post_class: post-template
                     <!-- Author Bio -->
                     {% if site.author.bio %}
                     <p>{{ site.author.bio }}</p>
+                    <p>You can contact me via <a href="mailto: {{ site.author.email}}">email</a>,
+                    <a href="https://twitter.com/{{ site.author.twitter }}">Twitter</a> or
+                    <a href="https://github.com/{{ site.author.github }}">Github</a>.
+                    </p>
                     {% endif %}
                 </section>                
             {% endif %}
