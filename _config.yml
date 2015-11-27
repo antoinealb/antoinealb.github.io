@@ -24,3 +24,6 @@ exclude: [README.md .bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_we
 # Details for the RSS feed generator
 url: 'http://antoinealb.net'
 baseurl: '/'
+
+gems:
+    - jekyll-feed
