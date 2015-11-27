@@ -248,6 +248,10 @@ p, ul, ol, dl {
     margin: 0 0 1.75em 0;
 }
 
+.post {
+    text-align: justify;
+}
+
 ol, ul {
     padding-left: 3rem;
 }
