@@ -2,31 +2,28 @@
 
 paginate: 10 # pagination based on number of posts
 paginate_path: "page:num"
-exclude: ["README.md"] # files to exclude
 highlighter: pygments
-markdown: kramdown
+markdown: redcarpet
 
-
-defaults:
-  -
-    scope:
-      path: "" # empty string for all files
-    values:
-      title: Antoine's blog
-
+name: "[ antoinealb.net ]"
 description: A blog about robotics, embedded software and Linux
+
 author:
-  name: Antoine Albertelli
+  name: Antoine
   email: antoinea101@gmail.com
   github: antoinealb
   twitter: antoinealb
   bio: Robotics enthusiast studying Microengineering in Lausanne, Switzerland
 
-rss_path: feed.xml
-categories_path: categories.html
-tags_path: tags.html
 
-BASE_PATH:
+logo: false
 
 # Exclude our ruby stuff
-exclude: [.bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_website.yml, .last_optimized]
+exclude: [README.md .bundle, bin, vendor, Gemfile, Gemfile.lock, Rakefile, s3_website.yml, .last_optimized]
+
+# Details for the RSS feed generator
+url: 'http://antoinealb.net'
+baseurl: '/'
+
+gems:
+    - jekyll-feed

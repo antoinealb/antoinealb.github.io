@@ -26,7 +26,7 @@ wget "https://raw.githubusercontent.com/hackndev/zinc/master/support/target-spec
 
 # Building libcore
 Libcore provides the most fundamental data types and functions supported by Rust.
-You can read more about it in [the documentation](https://doc.rust-lang.org/core/index.html).
+You can read more about it in [the documentation](http://doc.rust-lang.org/core/index.html).
 Since it is really the foundation of the compiler's result, they must have the same version, down to the commit.
 You can check which version of `rustc` you have on your computer by running `rustc --version -v` and looking for the commit-hash field.
 
