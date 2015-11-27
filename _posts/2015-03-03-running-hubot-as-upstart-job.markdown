@@ -7,7 +7,7 @@ tags: linux
 ---
 In this post I just want to explain how to run [Github's Hubot](https://hubot.github.com/) automatically using Ubuntu.
 
-You should read my previous [article](http://antoinealb.net/system/administration/2015/03/03/installing-lets-chat-on-ubuntu-precise.html) as I won't repeat the whole process about user creation, Node.js install, etc. here.
+You should read my previous [article]({% post_url 2015-03-03-installing-lets-chat-on-ubuntu-precise %}) as I won't repeat the whole process about user creation, Node.js install, etc. here.
 
 Hubot is really easy to install.
 The only hard part is launching it automatically at boot or after a crash.
