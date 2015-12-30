@@ -10,7 +10,7 @@ I recently received a Texas Instruments Tiva Launchpad board from another team i
 Once I had this board, I looked around for compilers / IDEs, but I quickly realized that most of them were closed source or Windows only.
 Since I really like to work on my Linux box, I decided to take some time to work on it.
 
-# Building an ARM bare metal toolchain
+#Building an ARM bare metal toolchain
 To work on a microcontroller we need to build a bare metal toolchain which will produce binary that will run without any operating system.
 To do that, we can use the script "Summon arm toolchain".
 Since the original project is not developped anymore, we will use a fork.
@@ -35,7 +35,7 @@ Check that it worked properly:
 ~/sat/bin/arm-none-eabi-gcc --version
 {% endhighlight %}
 
-# Build lm4flash
+#Build lm4flash
 lm4tools is a set of tools by Fabio Utzig to interact with the Tiva Launchpad.
 We are only interested in the lm4flash program which allows to send binaries on the board.
 I decided to go with this instead of OpenOCD for now because it seemed easier to use.
@@ -49,7 +49,7 @@ cd lm4tools/lm4flash
 make
 {% endhighlight %}
 
-# Getting the template and building the first app.
+#Getting the template and building the first app.
 I made a Stellaris template based on the original work of Mauro Scomparin.
 It was mostly a matter of fixing a few includes.
 I then tweaked it to my own needs.
@@ -75,7 +75,7 @@ Now your board should happily blink:
 If this is the case, congrats and have fun with ARM Microcontrollers !
 Otherwise, don't hesitate to shoot me an email or an issue and we will try to fix it !
 
-# Sources
+#Sources
 * [http://jeremyherbert.net/get/stm32f4_getting_started](Getting Started with the STM32F4 and GCC)
 * [http://kernelhacks.blogspot.ch/2012/11/the-complete-tutorial-for-stellaris.html](The complete tutorial for Stellaris LaunchPad development with GNU/Linux)
 

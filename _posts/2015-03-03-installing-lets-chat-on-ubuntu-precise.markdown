@@ -20,27 +20,27 @@ I forgot about it for a while, then stumbled upon [Let's chat](http://sdelements
 Plus it is supported (well sort of) by Hubot, which is our toy of choice.
 So after toying with it using the Vagrant image available on the website, I decided to start a new VPS and install it for a real world test.
 
-# Installing dependencies
+#Installing dependencies
 
-## Node.js
+##Node.js
 Installing Node.js is really easy, as there is a PPA (Personal Package Archive) available.
 We will also need the `build-essential` package, since some NPM modules need to be compiled.
 {% highlight bash %}
-# Adds the Node.js PPA
+#Adds the Node.js PPA
 curl -sL https://deb.nodesource.com/setup | sudo bash -
 sudo apt-get install nodejs build-essential
 {% endhighlight %}
 
-## MongoDB
+##MongoDB
 There is a package available:
 {% highlight bash %}
 sudo apt-get install mongodb-org
 {% endhighlight %}
 
-## Python
+##Python
 Python 2.7 is already installed with Ubuntu 12.04, there is no need to install anything.
 
-# Installing Let's Chat
+#Installing Let's Chat
 For security reason, we will run Let's Chat as its own user, with restricted privileges.
 First create this user:
 {% highlight bash %}
@@ -55,12 +55,12 @@ cd lets-chat
 npm install
 {% endhighlight %}
 
-## Configuration
+##Configuration
 Let's chat settings are stored in `settings.yaml`.
 There is a sample available and here is mine, slightly adapted from it:
 
 {% highlight yaml %}
-# See defaults.yml for all available options
+#See defaults.yml for all available options
 
 env: production
 
@@ -69,7 +69,7 @@ http:
   host: '0.0.0.0'
   port: 5000
 
-# Allow any file upload
+#Allow any file upload
 files:
   enable: true
   restrictTypes: true
@@ -84,7 +84,7 @@ secrets:
 
 You can now run `npm start` and point your browser on your server (port 5000 for now, we will fix it in the next step).
 
-# Serving the site on port 80
+#Serving the site on port 80
 Since we are running the web application with a non priviledged user, as you should be, we cannot bind to port 80.
 Recent Linux kernels can change this using a per-program authorization
 Since our program is interpreted by the `node` executable, it would mean any Node.js application could bind to lower ports, which is not ideal.
@@ -97,7 +97,7 @@ iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-port 5000
 iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 5000
 {% endhighlight %}
 
-# Running the site on server boot
+#Running the site on server boot
 Running the site with `npm start` is great, but it would be better if it is started automatically at boot.
 To do that we can use Ubuntu's Upstart init system.
 It allows us to write job descriptions and when they should be run.
@@ -108,7 +108,7 @@ Put the following in `/etc/init/lets-chat.conf`:
 description "Let's chat application server"
 author "Antoine Albertelli"
 
-# Taken from nginx job definition
+#Taken from nginx job definition
 start on (filesystem and net-device-up IFACE=lo)
 stop on runlevel [!2345]
 
@@ -127,12 +127,12 @@ Tadaa ! Now you can run `sudo initctl start lets-chat` and try to connect to you
 Your service will be started automatically on every boot.
 
 
-# TODO
+#TODO
 * Support for HTTPS (using self signed certificate).
 * Add automatic respawn.
 
 
-# References
+#References
 * [Let's chat's README](https://github.com/sdelements/lets-chat/blob/master/README.md)
 * [Node.js Ubuntu install guide](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions)
 * [MongoDB website](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)

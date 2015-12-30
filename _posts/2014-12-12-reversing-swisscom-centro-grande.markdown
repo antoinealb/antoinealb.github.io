@@ -10,18 +10,18 @@ In the end I did not find the huge root-level backdoor I was hoping to find, but
 I published my notes on [https://github.com/antoinealb/swisscom_centro_grande](Github) and got a few emails from fellow hackers trying to replicate my results.
 Now that I have a blog I might as well do an article about it, to have some content online !
 
-## Disclaimer 1
+##Disclaimer 1
 You may break stuff doing those manipulations.
 You follow this at your own risk.
 
-## Disclaimer 2
+##Disclaimer 2
 I am no Linux wizard.
 I might have skipped interesting things.
 Some parts may even be totally wrong.
 If you find something that should be changed, please tell me so !
 Also, if you try to replicate those results or investigate further, I would be very happy to hear from you.
 
-# Getting the firmware
+#Getting the firmware
 The first step of firmware analysis is getting the firmware.
 While that may sound obvious, there are actually quite a few ways to do it.
 The most complicated ones involve playing with JTAG or examining the chip under a microscope after opening it with acid.
@@ -32,7 +32,7 @@ To download it simply run the following command (Bluewin is the former name of t
 wget http://rmsdl.bluewin.ch/pirelli/Vx226N1_50033.rmt
 {% endhighlight %}
 
-# Firmware dissection 101
+#Firmware dissection 101
 Firmware updates can be in a lot of various formats;
 the first step of the analysis must be finding out what is in the file.
 The tool I use to do this is called Binwalk.
@@ -59,7 +59,7 @@ binwalk Vx226N1_50033.rmt -e
 cp _Vx226N1_50033.rmt.extracted/vmlinux.bin .
 {% endhighlight %}
 
-# What is in the vmlinux ?
+#What is in the vmlinux ?
 So now we have a vmlinux, but it turns out it contains other stuff too.
 Let's run binwalk on the extracted image to find out what is in there.
 I deleted some of the output to keep the log short.
@@ -73,7 +73,7 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 2316319       0x23581F        Copyright string: " 1995-2002 Jean-loup Gailly "
 2333484       0x239B2C        Unix home path string: "/home/sj1scannpa/openrg/rg/os/linux-2.6/kernel/sched.c"
 2333756       0x239C3C        Unix home path string: "/home/sj1scannpa/openrg/rg/os/linux-2.6/kernel/fork.c"
-# Snip...
+#Snip...
 2442560       0x254540        Unix home path string: "/home/sj1scannpa/openrg/rg/os/linux-2.6/net/8021q/vlan.c"
 2639619       0x284703        LZMA compressed data, properties: 0xC0, dictionary size: 33554432 bytes, uncompressed size: 134217728 bytes
 2795583       0x2AA83F        LZMA compressed data, properties: 0x88, dictionary size: 65536 bytes, uncompressed size: 131072 bytes
@@ -106,7 +106,7 @@ What can we learn from it ?
 The other filesystem looks like a rootfs.
 It contains a few standard UNIX directories such as etc, bin or home.
 
-# Analyizing /etc
+#Analyizing /etc
 I will now take a look at what is in /etc.
 For those who don't know, etc is the place where most config files go in UNIX.
 So far I only took a look at the configuration for OpenSSH server (`/etc/ssh/sshd_config`).
@@ -133,14 +133,14 @@ What I know though is that authorizing root login via password is not really sma
 Also empty password were explicictely turned on (PermitEmptyPasswords defaults to no).
 This is interesting, but I am not sure those are the settings used in production, maybe it is only for factory mode.
 
-# Playing with telnet
+#Playing with telnet
 Enough static analysis, it is time to boot that router!
 Running Nmap against it reveals that telnet is opened.
 After trying a few user / password combinations, it seems that `admin` / `1234` works as login / pass.
 
 We land in a configuration utility, but I think we can do better...
 
-## Getting a shell
+##Getting a shell
 
 1. Connect to the router : `telnet 192.168.1.1`. User: `admin`, pass: `1234`
 2. Go to factory settings : `factory` and enter the command `factory-mode`.
@@ -158,7 +158,7 @@ We land in a configuration utility, but I think we can do better...
 To get back to normal mode, exit the shell and then run `restore default-setting`.
 The router will reboot into normal mode.
 
-# Conclusion & Future work
+#Conclusion & Future work
 The next step would be "rooting" the device.
 This could be done in a few ways, for example exploiting vulnerabilities in setuid programs.
 The list of such executables can be found on the Github repository.

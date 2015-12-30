@@ -8,7 +8,7 @@ I have been running Arch on my Lenovo T420s for a few years now, and it has been
 However, I started working a lot with virtual machines, I was slowly running out of disk space.
 Since I wanted to document my installation for future reference, and I thought it may be useful to someone, I decided to make a blog post about it.
 
-## Why reinstall ? You could have migrated instead!
+##Why reinstall ? You could have migrated instead!
 I wanted to split my data between a spinning hard drive for my data and virtual machines and a SSD for my host OS.
 I could probably have migrated the data to the new drive, changed partition size and changed config just to make it work;
 It would have been very complex and error prone.
@@ -16,7 +16,7 @@ Remember the first point of the Arch Way:
 
 > Simplicity is absolutely the principal objective behind Arch development.
 
-# Pre-install planning
+#Pre-install planning
 Before wiping the hard drive, I took a few days to note what I was really using on my existing installation.
 I researched those topics, mostly using the ArchWiki, to make sure the install would be painless.
 After a few days of research, here is the list of what should work on my system in the end :
@@ -45,12 +45,12 @@ Since you leave them on almost everything you touch, they do not provide additio
 Don't forget to do a full backup of your home partition before reinstalling.
 I almost forgot to copy my SSH keys, which would have left me locked out of my servers.
 
-# Installation
+#Installation
 For the installation part of the process, I highly suggest reading Arch's beginner guide.
 It is one of the most complete installation walkthrough I saw and it explains your different options very well.
 I won't go into details that are in there, and focus on what is specific to my system.
 
-## Partionning
+##Partionning
 After booting the installer USB key, the first step before installing is the partionning of the system.
 I decided to stay on an MBR partition scheme, even if my system supports EFI and GPT, because I did not need more than 4 partitions per disk.
 
@@ -76,7 +76,7 @@ Finally I went with the following partition scheme for my main drive, which is a
 
 My second disk is only made of `/home` right now, but I plan to put other testing partitions on it when I get a bigger drive.
 
-## Bootloader installation
+##Bootloader installation
 I decided to keep Syslinux as on my previous install.
 I like it because it is quite powerful and way easier to setup than GRUB2.
 However, it only supports MBR and BIOS booting;
@@ -92,7 +92,7 @@ After changing it to BIOS emulation, it worked perfectly.
 This is a bit weird, as it worked flawlessly and the settings haven't changed since.
 I did not investigate it further and went on with my install.
 
-## Basic setup: User, vim and sudo
+##Basic setup: User, vim and sudo
 After my first succesful boot, the first thing I did was installing a non priviledged user.
 Doing your work as root is dangerous: even if you are not the target of hackers, any mistake can be a disaster.
 I installed `sudo` and setup it to accept my user as temporary superuser, which was super easy thanks to the wiki.
@@ -103,7 +103,7 @@ I also directly installed Vim, as I wanted to be able to edit my config files in
 Since I store my vimrc and other configs on Github I just had to clone them to the appropriate location.
 
 
-## Optimizing for SSDs
+##Optimizing for SSDs
 For now I simply replaced the `relatime` option with `noatime` on my SSD filesystems (in `/dev/fstab`).
 This reduces write wear by not writing the access date each time the file is opened for reading.
 I also added the `discard` option, which enables TRIM support on SSDs.
@@ -111,13 +111,13 @@ I also added the `discard` option, which enables TRIM support on SSDs.
 The next step would be to replace the kernel IO scheduler.
 It should improve latency, but I am happy as is, so I prefer to stay on tried and true schedulers.
 
-## Keyboard
+##Keyboard
 For virtual consoles, `/etc/vconsole.conf`:
 {% highlight bash %}
 KEYMAP=fr_CH
 {% endhighlight %}
 
-## Trackpoint (TBD)
+##Trackpoint (TBD)
 Put the following in `/etc/X11/xorg.conf.d/20-thinkpad.conf`
 
     Section "InputClass"
@@ -131,7 +131,7 @@ Put the following in `/etc/X11/xorg.conf.d/20-thinkpad.conf`
             Option          "YAxisMapping"          "4 5"
     EndSection
 
-# AUR and Yaourt
+#AUR and Yaourt
 For those of you who don't know, the Arch User Repository (AUR) is a collection of non-official packages that are built from source.
 You can build them using an official tool called `makepkg` but it is not easy and forces you to track dependencies and updates by hand.
 To avoid this, you can use what is called an AUR wrapper, and Yaourt is my favourite.
@@ -152,7 +152,7 @@ sudo pacman -U yaourt.xz # replace with name of the ouput file
 For the software updates, don't worry: Yaourt will now update itself from source.
 
 
-# Programming environment
+#Programming environment
 This one does not require much explanation.
 I will just list the few software I installed in case I need to do it again.
 
@@ -168,52 +168,52 @@ Virtualbox required a bit of configuration because it uses some kernel modules.
 You need to put the following in `/etc/modules-load.d/virtualbox.conf`:
 
 {% highlight bash %}
-# VirtualBox modules
+#VirtualBox modules
 vboxdrv
 vboxnetadp
 vboxnetflt
 vboxpci
 {% endhighlight %}
 
-# Wifi
+#Wifi
 Currently I am using NetworkManager;
 it is pretty well integrated into GNOME, so there is not much to say about it.
 I also still have to install `dnsmasq` to handle connection sharing.
 
-# Powersaving
+#Powersaving
 First of all, if you want to optimize your power saving, `powertop` is a real life saver.
 Install it with `yaourt -S powertop`.
 
-## Disabling Bluetooth
+##Disabling Bluetooth
 To save some power I disabled Bluetooth completely since I was not using it.
 
 Put the following in `/etc/modprobe/modprobe.conf` :
 
 {% highlight bash %}
-# disable bluetooth to save power
+#disable bluetooth to save power
 blacklist btusb
 blacklist bluetooth
 {% endhighlight %}
 
-## Kernel parameters
+##Kernel parameters
 There are some kernel parameters which can be incredibly efficient at saving power.
 Powertop can help you finding those.
 
 For now I have put the following in `/etc/sysctl.d/powersaving.conf` :
 
 {% highlight python %}
-# Non maskable watchdog creates a lot of interrupts, disable it
+#Non maskable watchdog creates a lot of interrupts, disable it
 kernel.nmi_watchdog = 0
 
-# Reduces disk access
+#Reduces disk access
 vm.dirty_writeback_centisecs = 6000
 
-# Seems to be a bit magic but recommended
+#Seems to be a bit magic but recommended
 vm.laptop_mode = 5
 {% endhighlight %}
 
 
-## Laptop mode
+##Laptop mode
 We can install laptop mode tools by doing `yaourt -S laptop-mode-tools`.
 We then enable it by doing `systemctl enable laptop-mode`.
 Don't forget about blacklisting usb autosuspend on a few devices.
@@ -235,7 +235,7 @@ Multiple blacklisted IDs are separated by spaces.
 Finaly run `systemctl restart latop-mode`.
 
 
-## PCI Power management
+##PCI Power management
 Here again, to enable it we simply follow the Arch Wiki:
 
 `/etc/udev/rules.d/pci_powersave.rules` :
@@ -245,7 +245,7 @@ ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
 {% endhighlight %}
 
 
-# Sound
+#Sound
 Sound is supported in two places:
 First the kernel is responsible for providing an interface to the audio hardware.
 This is done through something called ALSA.
@@ -257,57 +257,57 @@ It might even be installed by your desktop.
 I had to install a few Gstreamers plugins for MP3 support, and honestly, I don't really know which one enabled it.
 Just install everything in the base and ugly group.
 
-# Web tools
+#Web tools
 I did not need anything fancy.
 I just wanted Firefox and Chrome, in case one of them stops working.
 
 The installation was simply `yaourt -S chromium firefox`
 
-# Network tools
+#Network tools
 To put it in a Cyberpunk way : "All I needed was a few tools to make my way through the Net"
 I wanted SSH and Mosh, to connect to servers.
 I also wanted Irssi to chat on IRC.
 Transmission is really the best client out there to download your favorite Linux distribution or Creative Commons music (wink wink).
 Nmap is really useful for network diagnosis, so let's install it as well.
 
-# Desktop environment
+#Desktop environment
 
-## Gnome 3
+##Gnome 3
 Very easy, just do `pacman -S gnome gnome-extra`.
 I decided to use GDM because it is very well integrated and lightweight enough.
 It is already in `gnome-extra`, so you only need to run `systemctl enable gdm.service`.
 
-## XMonad
+##XMonad
 {% highlight bash %}
 yaourt -S xmonad xmonad-contrib xmonad-gnome3 dmenu
 {% endhighlight %}
 The config files are hosted in Git so they will be easy to retrieve.
 Just don't forget to run `xmonad --recompile` before starting the xmonad session.
 
-## Media Transfer Protocol
+##Media Transfer Protocol
 The media transfer protocol is a USB device class used by my Nexus 7 to access its memory.
 It was pretty easy to install : `pacman -S gvfs-mtp libmtp`.
 
 
-# Optimus
+#Optimus
 Optimus support so far is simply disabling the Nvidia card.
 I don't use it a lot (it may change if I do some OpenGL).
 
 We simply install `bbswitch` and then put the following in `/etc/modprobe/modprobe.conf` :
 
 {% highlight bash %}
-# disable NVidia card at boot
+#disable NVidia card at boot
 options bbswitch load_state=0 unload_state=0
 {% endhighlight %}
 
-# To be done
+#To be done
 Those parts are the one which I still need to do.
 They look more like notes, because they are.
 
-## CUPS
+##CUPS
 TBD
 
-## Backup solution
+##Backup solution
 Still to be done, but something in the spirit of :
 {% highlight bash %}
 rsync -aAXv /home/antoine/ /path/to/backup/
@@ -319,7 +319,7 @@ Also, don't forget to exclude `~/.cache`, `~/.config` and maybe other (hidden) f
 
 Should the script be unit tested ?
 
-## Hard drive protection sensor
+##Hard drive protection sensor
 Still to be done, but here are my notes.
 
 https://wiki.archlinux.org/index.php/Hard_Drive_Active_Protection_System
@@ -330,7 +330,7 @@ Apparently the current trend is to protect it via making uber resistant hard dri
 
 I should ask Joseph if he did anything to protect his drives.
 
-# Non DKMS modules
+#Non DKMS modules
 Those modules are the one that needs to be updated after each major kernel update.
 * `bbswitch`
 * `vboxdrv`

@@ -110,7 +110,7 @@ Finally, if the player choice is the correct one we increment the counter and st
 The rest of the code is pretty easy, so I won't dive in it.
 Instead I will try to explain what are the sets and how you can use it in that kind of case.
 
-# Python sets
+#Python sets
 The `set` object in Python is pretty much the same as mathematical set.
 It is a non-ordered collection which guarantees that each stored object is unique.
 The main advantage of sets is the ability to perform mathematical operations on it.
@@ -126,6 +126,6 @@ Here I used them to compute the valid possibilities for door choice in different
 Doing it with list would have been much harder.
 
 
-# References
+#References
 * [http://en.wikipedia.org/wiki/Monty_Hall_problem](Wikipedia article)
 * [https://docs.python.org/3.4/library/stdtypes.html#set-types-set-frozenset](Python set reference)
