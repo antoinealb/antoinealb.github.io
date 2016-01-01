@@ -32,7 +32,7 @@ The two presenter showed us their experiment: The REXUS one was about measuring 
 They spent lots of time discussing the technical details, which can be a bit boring if you are not into that kind of stuff.
 
 ##The exhaust emissions scandal "Dieselgate"
-This talks presents the state of the knowledge about the 2015 Volkswagen emission scandal (**Insert wiki link here**).
+This talks presents the state of the knowledge about the [2015 Volkswagen emission scandal](https://en.wikipedia.org/wiki/Volkswagen_emissions_scandal).
 One of the presenter has a background in automotive industry while the second is a reverse engineer, which provides a nice balance.
 The talk starts with some facts and numbers about the scandals then explains a bit the procedure for emission testing that VW cheated.
 Then they proceed to reverse engineer the firmware of the motor's control unit to have a deeper understanding of the cheating mechanism.
