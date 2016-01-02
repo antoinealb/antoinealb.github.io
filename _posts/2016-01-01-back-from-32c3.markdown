@@ -95,6 +95,15 @@ We learn about `/dev/urandom` and the difference with `/dev/random`, and which o
 A nice talk demistifying some software wizardry.
 
 ##Hardsploit: A Metasploit-like tool for hardware hacking
+I was really enthusiastic for this talk because of my interest in hardware RE.
+However, I am really not convinced by this project.
+There is a lot of different reasons behind this but it mostly boils down to two things:
+
+1. The board is way too expensive for no reason: most people will never use all the 64 IOs on the board.
+    There could have been a tremendous cost saving by going down to 10-20 pins.
+2. Adding new protocol requires FPGA programming.
+    I know this is required for some high performance parallel busses, but again I feel that most people probably won't use it.
+
 
 ##Logjam: Diffie-Hellman, discrete logs, the NSA and you
 The Logjam attack was revealed earlier this year and it was huge.
