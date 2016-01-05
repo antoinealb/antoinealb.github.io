@@ -149,7 +149,7 @@ Since I did not have time to watch everything I wanted, I made a short list of t
 * Wireless Drivers: Freedom considered harmful
 * Vehicle2Vehicle Communication based on IEEE802.11p
 * 3D printing on the moon
-* How hackers grind an MMORPH: By taking it apart!
+* How hackers grind an MMORPG: By taking it apart!
 * goto fail;
 * PQCHacks
 * Lifting the fog on Red Star OS
