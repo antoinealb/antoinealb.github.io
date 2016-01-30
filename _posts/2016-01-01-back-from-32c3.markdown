@@ -159,3 +159,5 @@ Since I did not have time to watch everything I wanted, I made a short list of t
 * Check your priviledges!
 * A dozen year of Shellphish
 * Ten years after "We Lost the War"
+* Maritime Robotics
+* Unpatchable
