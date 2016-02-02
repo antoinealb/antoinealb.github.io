@@ -3,7 +3,7 @@
 paginate: 10 # pagination based on number of posts
 paginate_path: "page:num"
 highlighter: rouge
-markdown: redcarpet
+markdown: kramdown
 
 name: "[ antoinealb.net ]"
 description: A blog about robotics, embedded software and Linux
