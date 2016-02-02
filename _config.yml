@@ -28,3 +28,4 @@ baseurl: '/'
 gems:
     - jekyll-feed
     - jekyll-sitemap
+    - jekyll-paginate
