@@ -2,7 +2,7 @@
 
 paginate: 10 # pagination based on number of posts
 paginate_path: "page:num"
-highlighter: pygments
+highlighter: rouge
 markdown: redcarpet
 
 name: "[ antoinealb.net ]"
