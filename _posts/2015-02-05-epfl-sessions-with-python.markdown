@@ -12,7 +12,7 @@ This package is now available on the Python Package Index, so you can get it by 
 This module only export one functions `create_tequila_session`, which can be used as follows:
 
 {% highlight python %}
-#Prings the logged-in homepage of Moodle
+# Prings the logged-in homepage of Moodle
 import tequila
 import getpass
 

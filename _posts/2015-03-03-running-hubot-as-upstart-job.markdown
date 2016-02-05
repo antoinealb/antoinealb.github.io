@@ -23,11 +23,11 @@ stop on runlevel [!2345]
 setuid node
 setgid node
 
-#Those are settings specific to my adapter, configure your environment accordingly
+# Those are settings specific to my adapter, configure your environment accordingly
 env HUBOT_LCB_TOKEN=APITOKEN
 env HUBOT_LCB_ROOMS=room1,room2
 
-#Path to hubot installation
+# Path to hubot installation
 chdir /home/node/zivibot
 
 exec bin/hubot --adapter lets-chat --name "zivibot"

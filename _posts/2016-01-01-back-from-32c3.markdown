@@ -17,7 +17,7 @@ The congress organizers wanted to remind us to keep trying to find a way to conn
 I made a list of the talks I went to with a small comment about each one.
 Globally the content quality was very very good and I encourage everyone to watch the recordings available [on the CCC website](https://media.ccc.de/c/32c3).
 
-##Keynote (Fatuma Musa Afrah)
+## Keynote (Fatuma Musa Afrah)
 This was a big surprise to me.
 I expected someone from the "technological/IT" community to give the keynote, but this was so much better!
 Fatuma told us about her experience crossing borders and coming to Germany as a newcomer (she insists on not calling them refugees).
@@ -25,13 +25,13 @@ Fatuma told us about her experience crossing borders and coming to Germany as a 
 She was a really good and really fun speaker as well.
 A must-watch talk. Seriously.
 
-##REXUS/BEXUS - Rockets and Ballon Experiments for University Students
+## REXUS/BEXUS - Rockets and Ballon Experiments for University Students
 This talk was about two scientific programs allowing students to either send thier experiment on a suborbital flight in a rocket (REXUS) or do longer flights in weather ballons (BEXUS).
 
 The two presenter showed us their experiment: The REXUS one was about measuring acceleration and temperature using optical fibers while the BEXUS team was experimenting with plane-to-satellite communication.
 They spent lots of time discussing the technical details, which can be a bit boring if you are not into that kind of stuff.
 
-##The exhaust emissions scandal "Dieselgate"
+## The exhaust emissions scandal "Dieselgate"
 This talks presents the state of the knowledge about the [2015 Volkswagen emission scandal](https://en.wikipedia.org/wiki/Volkswagen_emissions_scandal).
 One of the presenter has a background in automotive industry while the second is a reverse engineer, which provides a nice balance.
 The talk starts with some facts and numbers about the scandals then explains a bit the procedure for emission testing that VW cheated.
@@ -40,7 +40,7 @@ Then they proceed to reverse engineer the firmware of the motor's control unit t
 I really liked this talk because it was quite neutral and gave a lot of insight about how automakers worked and why this cheating could not be the act of isolated engineers.
 The reverse engineering work was well executed and presented the results clearly without loosing too much time in technical details.
 
-##The Great Train Cyber Robery
+## The Great Train Cyber Robery
 That talk was *awesome*.
 Presented by the SCADA Strangelove guys who were already presenting at 31C3, this talk investigates the possibility of cyber attacks on railroad systems.
 They show how it is possible for an attacker to exploit various flaws in such system's design, implementation or operation.
@@ -48,13 +48,13 @@ At the end of the talk they extend a bit their previous year research by demonst
 
 This talk is a lot of fun to wach: the presenters know their stuff, have a lot of humor and a caricatural russian accent, which makes everything better.
 
-##Thunderstrike 2
+## Thunderstrike 2
 This talk builds on the previous one presented at 31C3, where the author demonstrated the first firmware attack against Apple's Macbooks.
 I went because the topic interested me, having a macbook myself, but I did not like it as much as I expected.
 This has nothing to do with the level of the exploits demonstrated or the quality of the presentation.
 It was just a very technical presentation in a field (low level PC architecture) I did not master.
 
-##Console hacking
+## Console hacking
 I really like presentations about embedded device firmware hacking.
 As I do quite a lot of embedded work myself, it is nice to see what others have done and how they were pwned, to avoid repeating the same mistakes.
 They are usually easier to understand (at least for me) when compared to the Thunderstrike 2 attack.
@@ -62,7 +62,7 @@ They are usually easier to understand (at least for me) when compared to the Thu
 Hence, I had big expectations for this talk and I wasn't deceived.
 This level of console hacking is really good and the authors made a good job of bringing it to the audience.
 
-##One year of securitarian drift in France
+## One year of securitarian drift in France
 As you may know, France is currently under a state of emergency, declared after the [Paris November 2015 attacks](https://en.wikipedia.org/wiki/November_2015_Paris_attacks).
 This state of emergency significantly increase the power of the intelligence services and of the police and is supposed to be temporary.
 However the parlament is actually discussing a change in the constitution to allow it to continue for an indeterminate duration.
@@ -71,30 +71,30 @@ This might effectively lead to a "French patriot act", with all the problems it 
 In addition to presenting the changes in the French law, the two presenters (both French political activists) explain how they are fighting back to keep the internet a free place.
 I plan to watch it again in the following weeks, as the Swiss referendum on intelligence comes in the political scene.
 
-##Rowhammer.js: Root privileges for web applications
+## Rowhammer.js: Root privileges for web applications
 This talk shows an attack method to flip bits in DRAM cells from Javascript.
 It explains the difficulties of doing so and explores some theoretical weaponizings of the attack.
 
 I wasn't too thrilled by that one personally.
 Although their finding is interesting I think the whole attack seemed a bit too theoretical, at least one prototype exploit would have been nice.
 
-##Computational Meta-Psychology
+## Computational Meta-Psychology
 What. The. Hell.
 This talk was super weird.
 It mixed together deep learning, consciousness and God.
 I will watch it again to understand what the author meant.
 
-##De-anonymizing programmers
+## De-anonymizing programmers
 This talk present work done at Princeton university to apply stylometry method to software.
 The goal of stylometry is to find the author of a written piece using machine learning trained on work sample.
 After introducing the base maching learning principles used, the presenter explains how those concepts might be applied to software, by extracting syntaxical and semantical features from the program.
 
-##The plain simple reality of entropy
+## The plain simple reality of entropy
 In this presentation we learn about how a crypto random number generator based on hash functions works.
 We learn about `/dev/urandom` and the difference with `/dev/random`, and which one should be used in which occasions.
 A nice talk demistifying some software wizardry.
 
-##Hardsploit: A Metasploit-like tool for hardware hacking
+## Hardsploit: A Metasploit-like tool for hardware hacking
 I was really enthusiastic for this talk because of my interest in hardware RE.
 However, I am really not convinced by this project.
 There is a lot of different reasons behind this but it mostly boils down to two things:
@@ -105,7 +105,7 @@ There is a lot of different reasons behind this but it mostly boils down to two 
     I know this is required for some high performance parallel busses, but again I feel that most people probably won't use it.
 
 
-##Logjam: Diffie-Hellman, discrete logs, the NSA and you
+## Logjam: Diffie-Hellman, discrete logs, the NSA and you
 The Logjam attack was revealed earlier this year and it was huge.
 It basically allows anybody with enough computing power (such as NSA) to crack Diffie-Hellman key exchange and decrypt communication.
 
@@ -113,28 +113,28 @@ The talks explains the basic mechanisms that allowed logjam and some measurement
 Counter measures are also explained.
 (I checked my server and I am safe apparently!)
 
-##Iridium update
+## Iridium update
 This talk extends research about Iridium (satellite) pagers.
 Did not enjoy it so much as it is very technical and I did not have the required background.
 
-##apertus° AXIOM
+## apertus° AXIOM
 The AXIOM is the world first open source camera.
 The goal is to create a modular system, where the camera can be extended using boards in a similar fashion to PCI in PC systems.
 They are currently building a beta version and made a demo.
 Nice talk for those interested in the progress of Open Hardware.
 
-##libusb: Maintainer fail
+## libusb: Maintainer fail
 I really wanted to go see that one, as I am progressively involved in more and more open source projects in both developper and maintainer roles.
 It was presented by Peter Stuge, former head of libusb when the project was replaced by a hostile fork (libusbx).
 His analysis of the timeline is really interesting, and I liked that he did not seem bitter about it.
 A true "failosophy" talk.
 
-##State of the Onion
+## State of the Onion
 If you are interested in Tor, this talk is a good summary of everything that happened in the project since last year.
 Otherwise, it is of little interest.
 
 
-#Talks I plan to watch later
+# Talks I plan to watch later
 
 Since I did not have time to watch everything I wanted, I made a short list of the videos I am going to watch in the coming weeks:
 

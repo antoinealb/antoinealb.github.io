@@ -39,7 +39,7 @@ After a bit of reading, we know that we will have to provide three files :
 * `sys_arch.h` This files includes all the necessary files and defines the <code>sys_sem_t</code> and <code>sys_mbox_t</code> types for system semaphores and mailboxes.
 * `sys_arch.c` This files defines a set of functions used by lwIP to create tasks, semaphores and mailboxes. It also needs to provides a few utilitary functions to get the system's time.
 
-#cc.h
+# cc.h
 This file is pretty straightforward to implement : it only contains types and simple macros. The types can be defined as follow.
 Please note that this code snippet defines lwIP types using <code>stdint.h</code> types, which may not be available on your target platform.
 A better way of doing this would be to use UC/OS-II types.
@@ -86,7 +86,7 @@ We can find information about how to obtain atomicity in the UC/OS-II reference 
 #define SYS_ARCH_UNPROTECT(x)    OS_EXIT_CRITICAL()
 {% endhighlight %}
 
-#Semaphores
+# Semaphores
 Semaphores are a standard construct used in multithreading programming to implement synchronization between tasks or to guarantee exclusive access to a shared resource.
 They can be either binary or counting (lwip accept both).
 
@@ -94,7 +94,7 @@ Once again the UC/OS-II reference manual comes in handy to learn how they are im
 The only pitfall is that lwIP requires a way to mark semaphores as being 'invalid'.
 I don't know what this is used for, but we need to implement it so...
 
-##sys_arch.h
+## sys_arch.h
 For semaphores you only need to provide one thing : the definition of the semaphore type.
 I used a structure containing a pointer to an `OS_EVENT`, which is the 'real' semaphore and a validity flag, which is simply an integer.
 Put the following in `sys_arch.h`.
@@ -105,7 +105,7 @@ typedef struct {
 } sys_sem_t;
 {% endhighlight %}
 
-##sys_arch.c
+## sys_arch.c
 
 Now we have to provide implementations of semaphores functions.
 The complete list of functions that you need to implement can be found in `doc/sys_arch.txt`.
@@ -192,14 +192,14 @@ void sys_sem_free (sys_sem_t *sem)
 }
 {% endhighlight %}
 
-#Mailboxes
+# Mailboxes
 A mailbox is a software construct used in multithreaded programming to exchange data between two tasks. The UC/OS-II manual defines two types of mailboxes :
 
 * *Mailboxes* A mailbox is a variable in which a task can put a value to be read by another task.
     Read and write access to it is atomic, and a task can pend on it (wait for it to receive something).
 * *Mail queues* A mail queue is very similar to a mail box, the main difference being that only one value at a time can be put in a mailbox, while a mail queue can store several messages and deliver them in a FIFO fashion.
 
-##sys_arch.h
+## sys_arch.h
 _Note:_ After reading lwIP manual, it is very clear that what UC/OS-II calls a mail queue is called a mailbox in lwIP.
 
 Another important problem is that lwIP requires the mailing queue implementation to be able to exit immediatly if the queue is already full, which is not supported by UC/OS-II.
@@ -222,7 +222,7 @@ typedef struct {
 } sys_mbox_t;
 {% endhighlight %}
 
-##sys_arch.c
+## sys_arch.c
 First of all, let's implement mail queue creation.
 We need to create a queue, but also a counting semaphore that will be initialized to the queue size.
 
@@ -375,11 +375,11 @@ void sys_mbox_free(sys_mbox_t *mbox)
 }
 {% endhighlight %}
 
-#Completed port
+# Completed port
 The completed port can be found on [https://www.github.com/cvra/lwip_ucos2](Github), along with other projects we developped at the CVRA.
 
 A demo application using the port can also be found on [https://www.github.com/antoinealb/lwip_test](My Github Account).
 
-#Credits
+# Credits
 Our port of lwIP is based on original work by [http://geocities.com/michaelanburaj/](Michael Anburaj), and was modified to suit recent versions of UC/OS-II and lwIP.
 

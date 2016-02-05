@@ -8,7 +8,7 @@ Recently at the CVRA we decided to rewrite one important external library writen
 We wanted to rewrite in C, but since Rust recently hit beta I wanted to see if it was feasible to use it for our application.
 To do this, I decided to write a little demo application using Rust on a Texas Instruments Tiva Launchpad dev board.
 
-#Install native rustc
+# Install native rustc
 Nothing special here, just don't use the beta version, as we will use some unstable features.
 I installed latest Rust nightly on OSX via the following commands:
 {% highlight bash %}
@@ -16,7 +16,7 @@ brew tap cheba/rust-nightly
 brew install rust-nightly
 {% endhighlight %}
 
-#Download rust target description
+# Download rust target description
 This file is needed to tell Rust/LLVM about our Cortex M4 CPU, it's pointer size and so on.
 We will use the one from the Zync project:
 
@@ -24,7 +24,7 @@ We will use the one from the Zync project:
 wget "https://raw.githubusercontent.com/hackndev/zinc/master/support/target-specs/thumbv7em-none-eabi.json" -O thumbv7em-none-eabi
 {% endhighlight %}
 
-#Building libcore
+# Building libcore
 Libcore provides the most fundamental data types and functions supported by Rust.
 You can read more about it in [the documentation](http://doc.rust-lang.org/core/index.html).
 Since it is really the foundation of the compiler's result, they must have the same version, down to the commit.
@@ -46,7 +46,7 @@ mkdir libcore-thumbv7m
 rustc -C opt-level=2 -Z no-landing-pads --target thumbv7m-none-eabi -g rust/src/libcore/lib.rs --out-dir libcore-thumbv7m
 {% endhighlight %}
 
-#Provide needed runtime
+# Provide needed runtime
 For this little example I will reuse the runtime I build for my Tivaware template before.
 We will only need a few more functions needed by the Rust runtime, mostly for panic functions.
 
@@ -90,7 +90,7 @@ You can see how I did it in [my commit](https://github.com/antoinealb/rust-demo-
 All I had to do was build `main.rs` and "include" the other files with `mod` directives.
 This was a bit surprising at first and caused me quite some problems.
 
-#Porting our main function to Rust
+# Porting our main function to Rust
 My objective was reimplementing the "Hello, world" of embedded systems: blinking a LED.
 Basically this requires three things:
 
@@ -103,7 +103,7 @@ As I said I am very interested by Rust's compatibility with C, so I decided to u
 
 I only wrote bindings for what I used, since I probably won't use Tivaware for my more "real" projects (we don't use Texas Instruments chips, but STM32).
 
-##Sysctl binding
+## Sysctl binding
 The `SysCtl` subsystem as its name implies is related to system control, like clock, peripherals and interrupts.
 For this project I only need two Tivaware functions, `SysCtlClockSet` to configure system oscillator and `SysCtlPeripheralEnable` to enable the GPIO port on which my LED is connected.
 I will also need a few constants.
@@ -151,7 +151,7 @@ pub fn peripheral_enable(peripheral: u32)
 }
 {% endhighlight %}
 
-##GPIO bindings
+## GPIO bindings
 I applied the same process as before, but later reworked it to have a bit more type safety.
 By using `u32` directly like in the sysctl module, we gain little to nothing over C, so I decided that for the GPIO driver I will use custom types for ports and pins.
 I will just put the different constants in enumerations and use those enumerations in my public API.
@@ -201,7 +201,7 @@ pub fn write(port: Port, pin: Pin, value: bool) {
 }
 {% endhighlight %}
 
-#Putting it together
+# Putting it together
 First we write a simple LED driver to hide the hardware details from main.
 This driver needs to configure a given pin as output, enable the port on which the led is connected and provide functions to set the LED state.
 
@@ -278,7 +278,7 @@ fn clock_init() {
 
 Just run `make all load` and the LED will start blinking! The complete project is available on [Github](https://github.com/antoinealb/rust-demo-cortex-m4).
 
-#What's next ?
+# What's next ?
 This was just a basic experiment with Rust and ARM microcontrollers.
 I started working on interrupts and bindings to ChibiOS.
 I also would like to design safer APIs instead of simply translating the code to Rust.
@@ -287,7 +287,7 @@ I also would like to design safer APIs instead of simply translating the code to
 It is now possible to write ChibiOS threads in Rust.
 His work can be found in the `chibi-rust` branch of the repository.
 
-#Sources:
+# Sources:
 * http://spin.atomicobject.com/2015/02/20/rust-language-c-embedded/
 * https://doc.rust-lang.org/core/
 * [My previous post about Stellaris](http://antoinealb.net/programming/2014/04/21/stellaris-linux.html)
