@@ -31,6 +31,7 @@ The first step I take on any server I am charged with setting up are a set of ba
 2. Disable root login via SSH.
 3. Setup SSH public key based authentication and disable password-based login.
 4. Add a firewall to whitelist incoming traffic to ports 22 (SSH), 80 (HTTP) and 443 (HTTPS).
+5. Turn on automated security updates
 
 ##Setting up a user account
 
@@ -146,3 +147,39 @@ Reboot your server and run NMap again to be sure that your server is correctly p
 
 **Note:** Apparently my ISP modifies my traffic so that the port 25 of the server is always opened.
 I don't know why they do this, but it is not apparent when I scan my server from somewhere else, so be aware that it can happen to you too.
+
+# Updating the old server
+Gitlab can only be migrated from server to server using a backup restore to an identical version of Gitlab.
+Therefore we need to update the old install of Gitlab to the Omnibus version we plan to install.
+Fortunately for us, this is a [well documented and tested process](https://gitlab.com/gitlab-org/gitlab-ce/tree/master/doc/update).
+Don't forget to make a backup at the beginning in case things go south.
+
+# Installing Gitlab
+
+## Installing Postfix
+
+First of all we need to install the Postfix mail server.
+It will be used by Gitlab to send email to the users, for notifications, password recovery, etc.
+It is really important that your firewall denies connections to Postfix from the outside world, otherwise your email will be marked as spam and refused by users' ISPs.
+This happened to me before, and it is practically impossible to revert once it happens.
+
+To install Postfix, run `sudo apt-get install postfix` and select `Internet Site` when asked what type of installation you want.
+
+## Installing Gitlab
+
+First of all, add the Gitlab repository to your server:
+
+{% highlight bash %}
+curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+{% endhighlight %}
+
+Then install Gitlab Community Edition itself:
+
+{% highlight bash %}
+sudo apt-get install gitlab-ce
+{% endhighlight %}
+
+You can then start Gitlab by running `sudo gitlab-ctl reconfigure`.
+
+**TODO:** configure gitlab properly and add let's encrypt
+
