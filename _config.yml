@@ -5,7 +5,7 @@ paginate_path: "page:num"
 highlighter: rouge
 
 name: "[ antoinealb.net ]"
-description: A blog about robotics, embedded software and Linux
+description: A blog about robotics, embedded software and Linux. Also doubles as my personal wiki
 
 author:
   name: Antoine Albertelli
