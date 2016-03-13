@@ -148,6 +148,28 @@ Reboot your server and run NMap again to be sure that your server is correctly p
 **Note:** Apparently my ISP modifies my traffic so that the port 25 of the server is always opened.
 I don't know why they do this, but it is not apparent when I scan my server from somewhere else, so be aware that it can happen to you too.
 
+## Enabling automated security updates
+I know that turning on automated updates is a bit controversial because it can bring unexpected downtime if an update breaks the system or simply if the server needs to reboot to finish an upgrade.
+However, given that I am the only admin of the server and that it is not my primary job, I might not be able to always update the system by hand when a vulnerability lands.
+I am probably also one of the only users of the server so it does not matter if there is a little bit of unscheduled downtime here and there.
+
+Enabling automated updates on Ubuntu is really easy: just put the following in `/etc/apt/apt.conf.d/10periodic`:
+{% highlight conf %}
+// Automatically update package list every day
+APT::Periodic::Update-Package-Lists "1";
+
+// Upgrade packages configured to do so
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::Unattended-Upgrade "1";
+
+// Clean local download archive every week
+APT::Periodic::AutocleanInterval "7";
+
+// Automatically reboot *WITHOUT CONFIRMATION*
+//  if the file /var/run/reboot-required is found after the upgrade
+Unattended-Upgrade::Automatic-Reboot "true";
+{% endhighlight %}
+
 # Updating the old server
 Gitlab can only be migrated from server to server using a backup restore to an identical version of Gitlab.
 Therefore we need to update the old install of Gitlab to the Omnibus version we plan to install.
