@@ -97,7 +97,7 @@ A nice talk demistifying some software wizardry.
 ## Hardsploit: A Metasploit-like tool for hardware hacking
 I was really enthusiastic for this talk because of my interest in hardware RE.
 However, I am really not convinced by this project.
-There is a lot of different reasons behind this but it mostly boils down to two things:
+There is a lot of different reasons behind this but two really kill the buzz:
 
 1. The board is way too expensive for no reason: most people will never use all the 64 IOs on the board.
     There could have been a tremendous cost saving by going down to 10-20 pins.

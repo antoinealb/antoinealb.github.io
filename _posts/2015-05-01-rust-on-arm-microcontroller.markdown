@@ -99,7 +99,7 @@ Basically this requires three things:
 3. GPIO writing in a main loop.
 
 All of this is usually done using either direct register access or a library.
-As I said I am very interested by Rust's compatibility with C, so I decided to use Texas Instruments' Tivaware, which is a very basic library to deal with low level hardware settings.
+As I said I am interested by Rust's compatibility with C, so I decided to use Texas Instruments' Tivaware, which is a basic library to deal with low level hardware settings.
 
 I only wrote bindings for what I used, since I probably won't use Tivaware for my more "real" projects (we don't use Texas Instruments chips, but STM32).
 
@@ -124,7 +124,7 @@ pub const SYSCTL_OSC_MAIN         : u32 = 0x00000000;  // Osc source is main osc
 pub const SYSCTL_PERIPH_GPIOF     : u32 = 0xf0000805;  // GPIO F
 {% endhighlight %}
 
-The functions binding are not very complicated.
+The functions binding are not complicated.
 You just declare them as `extern` and you can then call them from unsafe blocks.
 I will also write safe wrappers around them for ease of use.
 Since Rust functions are module private by default, we don't have to worry about someone directly using the C functions incorrectly.
