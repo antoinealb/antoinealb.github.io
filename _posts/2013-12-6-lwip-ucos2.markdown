@@ -19,7 +19,7 @@ tools and jump straight to the application. This is where IP (either TCP/IP or U
 using ports numbers and we also have fantastic debugs tools available, like Wireshark.
 
 
-lwIP is a small implementation of the IP protocol, whose main focus is to avoid relying on specific OS constructs and keeping a very low memory footprint, which makes it perfect for embedded systems.
+lwIP is a small implementation of the IP protocol, whose main focus is to avoid relying on specific OS constructs and keeping a low memory footprint, which makes it perfect for embedded systems.
 In addition to TCP/IP and UDP/IP, it provides PPPoS, which will be really useful to us, as we don't have Ethernet connectivity on the FPGA boards.
 
 As you can see on the architecture schematic, both of our FPGA boards will be running a shiny NIOS-II softcore processor, which in turn will be running the UC/OS-II operating system.
@@ -40,7 +40,7 @@ After a bit of reading, we know that we will have to provide three files :
 * `sys_arch.c` This files defines a set of functions used by lwIP to create tasks, semaphores and mailboxes. It also needs to provides a few utilitary functions to get the system's time.
 
 # cc.h
-This file is pretty straightforward to implement : it only contains types and simple macros. The types can be defined as follow.
+This file is pretty straightforward to implement : it only contains types and simple macros. The types can be defined as follows.
 Please note that this code snippet defines lwIP types using <code>stdint.h</code> types, which may not be available on your target platform.
 A better way of doing this would be to use UC/OS-II types.
 
@@ -197,10 +197,10 @@ A mailbox is a software construct used in multithreaded programming to exchange 
 
 * *Mailboxes* A mailbox is a variable in which a task can put a value to be read by another task.
     Read and write access to it is atomic, and a task can pend on it (wait for it to receive something).
-* *Mail queues* A mail queue is very similar to a mail box, the main difference being that only one value at a time can be put in a mailbox, while a mail queue can store several messages and deliver them in a FIFO fashion.
+* *Mail queues* A mail queue is similar to a mail box, the main difference being that only one value at a time can be put in a mailbox, while a mail queue can store several messages and deliver them in a FIFO fashion.
 
 ## sys_arch.h
-_Note:_ After reading lwIP manual, it is very clear that what UC/OS-II calls a mail queue is called a mailbox in lwIP.
+_Note:_ After reading lwIP manual, it is clear that what UC/OS-II calls a mail queue is called a mailbox in lwIP.
 
 Another important problem is that lwIP requires the mailing queue implementation to be able to exit immediatly if the queue is already full, which is not supported by UC/OS-II.
 To implement this behaviour, we use a counting semaphore which stores the number of available slots in the mail queue.
@@ -322,7 +322,7 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
 }
 {% endhighlight %}
 
-The non-blocking version is shorter, but very similar:
+The non-blocking version is shorter, but similar:
 
 {% highlight c %}
 u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
