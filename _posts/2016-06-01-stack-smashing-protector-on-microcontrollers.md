@@ -52,10 +52,11 @@ Turning on SSP with GCC is quite easy: Just add `-fstack-protector-all` to your 
 You might also be interested in `-fstack-protector` and `-fstack-protector-strong` which use some heuristics to exclude some functions from being checked.
 
 So let's build and see how it goes:
-```
-/Users/antoine/arm-gcc-toolchain/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/bin/ld: cannot find -lssp_nonshared
-/Users/antoine/arm-gcc-toolchain/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/bin/ld: cannot find -lssp
-```
+
+{% highlight bash %}
+arm-none-eabi/bin/ld: cannot find -lssp_nonshared
+arm-none-eabi/bin/ld: cannot find -lssp
+{% endhighlight %}
 
 Apparently some libraries are missing.
 
