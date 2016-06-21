@@ -117,3 +117,16 @@ I have an idea on how to use the MPU to prevent thread stack overflows (differen
 I also would like to implement heap corruption detection but I don't know how I will do this yet.
 If anybody has done this before I would be glad to hear about it.
 
+# Edit 21st june 2016
+
+I realized that `.a` files cannot be shared accross machines.
+I modified my build process to generate the required files automatically by adding the following lines to my `Makefile`:
+
+{% highlight make %}
+libssp.a:
+	arm-none-eabi-ar rcs $@
+libssp_nonshared.a:
+	arm-none-eabi-ar rcs $@
+
+myproject.elf: libssp.a libssp_nonshared.a
+{% endhighlight %}
