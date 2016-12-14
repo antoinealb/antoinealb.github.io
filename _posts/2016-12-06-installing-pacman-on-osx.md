@@ -24,15 +24,14 @@ My plan of action is the following:
 
 libarchive is used by pacman to create and extract various archive format.
 To build it, use the following commands.
-**Do not run make install yet.**
-We will install the final version using pacman later.
 
 ```bash
 wget http://www.libarchive.org/downloads/libarchive-3.2.2.tar.gz
 tar -xf libarchive-3.2.2.tar.gz
 pushd libarchive-3.2.2/
-./configure
-make
+./configure --prefix=`cd ..; pwd`
+make -j
+make install
 popd
 ```
 
@@ -44,12 +43,17 @@ As before, **do not run make install**.
 
 ```bash
 wget https://sources.archlinux.org/other/pacman/pacman-5.0.1.tar.gz
+tar -xf pacman-5.0.1.tar.gz
 pushd pacman-5.0.1
-./configure CFLAGS="-I `cd ../libarchive-*/libarchive; pwd`" \
-            LIBARCHIVE_CFLAGS="-I `cd ../libarchive-*/libarchive; pwd`" \
-            LIBARCHIVE_LIBS="-L`cd ../libarchive-*/; pwd` -larchive" \
-            --disable-doc
-make
+./configure CFLAGS="-I `cd ..; pwd`/include" \
+            LIBARCHIVE_CFLAGS="-I `cd ..; pwd`/include" \
+            LIBARCHIVE_LIBS="-L`cd ..; pwd`/lib -larchive" \
+            --disable-doc \
+            --prefix=`cd ..; pwd` \
+            --localstatedir=/usr/local/pacman/var
+
+make -j
+make install
 popd
 ```
 
@@ -59,16 +63,12 @@ This step will create a place for pacman to put its package database.
 
 ```bash
 sudo mkdir -p /usr/local/pacman/var/lib/pacman
-```
 
-We also need to prepare a Pacman temporary configuration.
-Put the following in `pacman_bootstrap.conf`:
+# Create the pacman database
+sudo ./bin/pacman -Q
 
-```conf
-# See the pacman.conf(5) manpage for option and repository directives
-[options]
-CheckSpace
-LocalFileSigLevel = Optional
+# Add the temporary pacman install to our path
+export PATH=$PATH:`cd bin; pwd`
 ```
 
 ## Use pacman to install libarchive
@@ -83,11 +83,11 @@ We cannot use the same as Linux's because we need to adapt a few paths.
 pushd packages/libarchive
 
 # Build the libarchive package
-../../pacman-*/scripts/makepkg
+../../bin/makepkg
 
 # Install it
-sudo ../../pacman-*/src/pacman/pacman \
-    --config ../../pacman_bootstrap_config.conf \
+sudo ../../pacman-5.0.1/src/pacman/pacman \
+    --config ../../pacman_bootstrap.conf \
     -U libarchive-*-x86_64.pkg.tar.gz
 popd
 ```
