@@ -1,6 +1,7 @@
 ---
 layout: post
 title: How to read a datasheet ?
+description: How to read a datasheet ?
 ---
 
 So, since you started your journey into hardware making one word has

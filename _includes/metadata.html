@@ -1,0 +1,5 @@
+<meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.name }}{% endif %}" />
+<meta property="og:site_name" content="{{ site.name }}" />
+<meta property="og:url" content="{% if canonical %}{{ canonical }}{% else %}{{ site.baseurl }}{% endif %}/" />
+<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}" />
+<meta property="og:author" content="{{ site.author.name }}" />
