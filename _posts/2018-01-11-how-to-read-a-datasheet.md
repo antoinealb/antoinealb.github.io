@@ -131,3 +131,6 @@ relevant chapters from the datasheet. Then, take notes, draw schematics,
 write pseudo-code, highlight important sections etc. You cannot keep
 every important information in your head, and they will come back to
 bite you.
+
+The datasheet is like a search engine. Use Ctrl-F a lot, and ask questions to the document.
+After a while you will know the kind of jargon used by your device's manufacturer and you will be able to quickly find the detail you need.
