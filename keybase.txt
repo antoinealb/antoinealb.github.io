@@ -1,0 +1,81 @@
+==================================================================
+https://keybase.io/antoinealb
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://antoinealb.net
+  * I am antoinealb (https://keybase.io/antoinealb) on keybase.
+  * I have a public key with fingerprint 42AE 539A 3A0F F017 E37A  2906 2042 F8B0 8DC9 DBE7
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012081e6461b877e06ea20333d118a1d8286acc088550455c826cadf109a9c38c40e0a",
+      "fingerprint": "42ae539a3a0ff017e37a29062042f8b08dc9dbe7",
+      "host": "keybase.io",
+      "key_id": "2042f8b08dc9dbe7",
+      "kid": "01014044cbc1a6780ee1e587cc99349b8334e868fca4ce971de3646c087fb0081ca80a",
+      "uid": "59a6d5902cd07c2eef4147c45fff6319",
+      "username": "antoinealb"
+    },
+    "merkle_root": {
+      "ctime": 1530866971,
+      "hash_meta": "21b071e9309bd29224d9a6289a0d6b3fcb96917d6d51867f04148b8931727e62",
+      "seqno": 3208176
+    },
+    "revoke": {
+      "sig_ids": [
+        "ee5d815b5c0b0639b22613fee71811f230429e0605d36d479f2c14011886e8b90f"
+      ]
+    },
+    "service": {
+      "hostname": "antoinealb.net",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1530866977,
+  "expire_in": 157680000,
+  "prev": "fdd4d79ba4d045ac1d3b81ba874729c19e07e09210dd33759cc27412c4d91a8f",
+  "seqno": 12,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+owFtU21oVmUYfpcfTTGZhBhhLo/2p330fJzzfGzBWLBfYkUmScteno/7bIe9e886
+52xT1ohCaBqtoo9FX/4oIWhZMeeMsnIVw1w1FgjmErORU0jEGJV9PmckQXX+HM5z
+rvu6r+u67+fJaxYVKituvO3ntx8/evJsxbFzutDaVLetz9Ox3ek19HkdsPCCkoU0
+K3ZE1mvwECZIYGA+w1pwDoiBIohSajEWCltBBFPGICGCAPlBYARhRtkQI6mkocL4
+CJDyar0wKrdB0pVE5czR+kRBQKWiCoUhwhwoV0QiRpBPQqGRsEZaDdwVtsdpXuHE
+aZVCfRS7M/dRXJD3P/gruhH2ke8bbbBiXCAADIHgxkhJfakFpT4IJkKjfAOSYwvU
+mXRGeKiRs2yUWNDdvUAXSMVsIBExFnFDAEIf+9z4QRiGjGKZA1NIyqoTHFqVszgq
+gyppr7/W64SkowTFJI6zPF6TRTkIBxQJxlxnZ1Gl7cVOyFTuCGvEMUiKpLZEEuJb
+15sIqZBlmoZGSyYxt04OFoyHyAkRWkiKOeHAiFOSwgPl2Gug+eQ4cwoS6Ik7IG+e
+Rm0uuNRraPUAPuoLrMCBDgzSiFGpCWGYhgAcC4xDQl240k0cBZYy63MZEuNCdYMX
+DISWKPS29+ftkp7ILNDns/pPBvVlyJyqriTOYhOX3L/2LOtKG/Jssp1dObgXdPFv
+mqKOytbtiqvogSSN4rLLyiH/HRuv9WBHV5RAMcoRAWcCuSfvAz2OMrTWt1xq5Vu3
+l8pgS7XAWgnucyINdsbcNkuCkbWU8kAaQ7iPiXF5YyXCf3LExOlUbY7TpVdWWXcC
+Xv/y3RVrFxcqKgtLl1yV36LC8mVVV65W42xl4dEDw9vOftndsv7Y+yOfvvfO/TcN
+npgaHXvp1IOrXmwe+mXj2OTnc7ev+u3HrVFHdPPBwd83DK185Lv6u+penxydmykO
+bJg/8MfMEbyobnp29aXd65r2XJgfP/Hq8MPH267vfTObfavzKbPv3LevVT9xaO5Z
+NfHJlk3DE/abUbi8edfku+O/Nl0cuoA3ndxR09xbWnE+3dqq71u98viWqbHDp96Y
+H1x2y8i6mcvPtExceq591/4PWwYGlvRMHS6cGVzx0D3bR8b3/VD38d7p6kPfT1/9
+mK7+c+1PZ26o++DeI6efR3pjS9VX69Oao2bi4GdrNl/8+vTTI3evaT+/9M7FL9Tc
+sb/x1pnSddfueWXvFy83VzX+BQ==
+=gWrI
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/antoinealb
+
+==================================================================
