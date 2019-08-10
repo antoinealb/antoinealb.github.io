@@ -3,9 +3,9 @@ layout: post
 title: Automatically restarting an IKEA TRÅDFRI gateway
 ---
 
-So I recently got myself a set of connected light bulbs for my living room.
+So I got myself a set of connected light bulbs for my living room.
 Based on review, I decided to go with the IKEA models, as they are pretty inexpensive and provide good quality lighting.
-I also decided to have a gateway, which allows you to control your lamps from your LAN and provide a few additional functions like lamp groups.
+I also decided to have a gateway, which allows you to control your lamps from your LAN and provide additional functions like lamp groups.
 The gateway also offers an API so I figured it could be a fun thing to hack with. 
 
 In the beginning, everything seemed fine, and controlling the lamps from the smartphone was nice.
@@ -16,19 +16,19 @@ And indeed, rebooting the gateway solved the issues I was facing.
 
 ![Fixing a TRÅDFRI memory leak]({{ site.url }}/assets/media/tradfri-reboot/reboot.gif)
 
-Fortunately, the gateway API appears to include a [remote reboot command](https://github.com/ggravlingen/pytradfri/blob/70ff6b83c6c64708f7ed22f2193406b0a10b0e64/pytradfri/gateway.py#L171-L179) which we should be able to use to avoid turning it off and on manually.
+The gateway API includes a [remote reboot command](https://github.com/ggravlingen/pytradfri/blob/70ff6b83c6c64708f7ed22f2193406b0a10b0e64/pytradfri/gateway.py#L171-L179) which we should be able to use to avoid turning it off and on by hand.
 I did a quick experiment using the command found in the above GitHub issue to confirm the API worked as expected, and confident enough, decided to automate this.
 
 My initial plan was to use my router to host the automation for rebooting the gateway, to avoid adding complexity.
 However, it turns out compiling custom software on pfSense is [more complicated than expected](https://docs.netgate.com/pfsense/en/latest/development/compiling-software-on-the-firewall.html).
 I was already spending more time than I wanted on this so I decided to pull my Raspberry Pi out of the drawer and hook it up.
-Maybe one day I will take some time to properly package the solution for pfSense, but we all know how temporary solutions end up... 
+Maybe one day I will take some time to package the solution for pfSense, but we all know how temporary solutions end up... 
 
 I will assume you have an up to date version of Raspbian installed.
 Plenty of blogs on the Internet cover this up already.
 
 The gateway communicates using a protocol called CoAP, which is a lightweight RPC protocol with semantics resembling HTTP.
-An open source implementation of this is [libcoap](https://libcoap.net/), which is used by a [Python API for the IKEA modules](https://github.com/ggravlingen/pytradfri).
+An open source implementation of this is [libcoap](https://libcoap.net/), used by a [Python API for the IKEA modules](https://github.com/ggravlingen/pytradfri).
 We will install it from source using the following commands:
 
 ```bash
@@ -40,7 +40,7 @@ git submodule update --init --recursive
 make && sudo make install
 ```
 
-We can easily install Python and the API:
+We can install Python and the API:
 
 ```shell
 sudo apt install python3 python3-pip
@@ -111,9 +111,9 @@ reboot_tradfri.py $IP -k "$KEY"
 Finally, we will reboot the gateway each morning at 5 AM.
 At this point everybody should be asleep and not using the lights so it should not create any issues.
 We will use [Cron](https://en.wikipedia.org/wiki/Cron) which is a system used to schedule periodic jobs on UNIX systems.
-It is configured by a file called the Crontab, and you can read how this file works by doing `man 5 crontab`.
+You configure it using a file called the Crontab, and you can read how this file works by doing `man 5 crontab`.
 Append the following to the crontab by running `EDITOR=nano crontab -e`, which will open an editor to modify your cron job definitions.
-Once you exit the editor, the syntax of the file will be checked and the new jobs will install if the file is OK.
+Once you exit the editor, cron checks the syntax of the file and installs the new jobs if the config is valid.
 
 ```
 0 5 * * * PATH=$PATH:/usr/local/bin && export PATH && reboot_tradfri.py -k KEY IP
@@ -121,6 +121,6 @@ Once you exit the editor, the syntax of the file will be checked and the new job
 
 Your gateway should now reboot everyday automatically, and keep working for a long time.
 It is a bit annoying to have to do that kind of workarounds for a commercial product.
-I would love either a fix from IKEA, or a way to deploy this more easily on my pfSense box.
+I would love either a fix from IKEA, or a way to deploy this on my pfSense box.
 
 But for now, I can move on to other stuff!
