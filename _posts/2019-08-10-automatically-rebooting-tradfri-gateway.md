@@ -53,7 +53,7 @@ Place the following in `/usr/local/bin/reboot_tradfri.py` and make it executable
 ```python
 #!/usr/bin/env python3
 """
-Reboots a IKEA Tradfri gateway.
+Reboots a IKEA Tradfri gatetway.
 
 This can be used from a crontab to avoid a memory leak in the tradfri firmware.
 """
@@ -65,14 +65,24 @@ from pytradfri.util import load_json, save_json
 
 import uuid
 import argparse
+import json
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('host', metavar='IP', type=str,
+    parser.add_argument('host',
+                        metavar='IP',
+                        type=str,
                         help='IP Address of your Tradfri gateway')
-    parser.add_argument('--key', '-k', required=True,
+    parser.add_argument('--key',
+                        '-k',
+                        required=True,
                         help='Security code found on your Tradfri gateway')
+    parser.add_argument('--config',
+                        '-c',
+                        required=True,
+                        type=argparse.FileType('a+'),
+                        help="Path to config file")
 
     args = parser.parse_args()
 
@@ -82,18 +92,38 @@ def parse_args():
     return args
 
 
+def load_identity(config_file):
+    config = json.load(config_file)
+    return config['identity'], config['psk']
+
+
+def save_identity(config_file, identity, psk):
+    conf = {'identity': identity, 'psk': psk}
+    config_file.seek(0)
+    json.dump(conf, config_file, indent=2)
+
+
 def main():
     args = parse_args()
 
-    identity = uuid.uuid4().hex
-    api_factory = APIFactory(host=args.host, psk_id=identity)
+    args.config.seek(0)
 
-    psk = api_factory.generate_psk(args.key)
+    try:
+        identity, psk = load_identity(args.config)
+        api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk)
+    except (KeyError, json.JSONDecodeError) as e:
+        print("Generating new identity & PSK")
+        identity = uuid.uuid4().hex
+        api_factory = APIFactory(host=args.host, psk_id=identity)
+        psk = api_factory.generate_psk(args.key)
+
+        save_identity(args.config, identity, psk)
 
     api = api_factory.request
 
     gateway = Gateway()
     api(gateway.reboot())
+
 
 if __name__ == '__main__':
     main()
@@ -105,7 +135,7 @@ Check that it worked by observing the status LEDs on the gateway itself.
 Make sure to replace `$SECURITY_CODE` with the string you can find on the back of your gateway, and $IP with its IP address.
 
 ```bash
-reboot_tradfri.py $IP -k "$KEY"
+reboot_tradfri.py $IP -k "$KEY" -c ~/tradfri_identity.json
 ```
 
 Finally, we will reboot the gateway each morning at 5 AM.
@@ -116,7 +146,7 @@ Append the following to the crontab by running `EDITOR=nano crontab -e`, which w
 Once you exit the editor, cron checks the syntax of the file and installs the new jobs if the config is valid.
 
 ```
-0 5 * * * PATH=$PATH:/usr/local/bin && export PATH && reboot_tradfri.py -k KEY IP
+0 5 * * * PATH=$PATH:/usr/local/bin && export PATH && reboot_tradfri.py -k KEY -c ~/tradfri_identity.json IP
 ```
 
 Your gateway should now reboot everyday automatically, and keep working for a long time.
