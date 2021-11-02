@@ -33,8 +33,7 @@ We will install it from source using the following commands:
 
 ```bash
 sudo apt-get install build-essential autoconf automake libtool
-git clone https://github.com/obgm/libcoap.git && cd libcoap
-git submodule update --init --recursive
+git clone --recursive https://github.com/obgm/libcoap.git && cd libcoap
 ./autogen.sh
 ./configure --disable-tests --disable-documentation --enable-examples --with-tinydtls --disable-shared --prefix=/usr/local
 make && sudo make install
@@ -82,7 +81,7 @@ def parse_args():
                         '-c',
                         required=True,
                         type=argparse.FileType('a+'),
-                        help="Path to config file")
+                        help="Path to the configuration file. Will be created if it does not exist.")
 
     args = parser.parse_args()
 
@@ -109,9 +108,12 @@ def main():
     args.config.seek(0)
 
     try:
+        # Try to load a pre-existing shared key from the configuration file
         identity, psk = load_identity(args.config)
         api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk)
     except (KeyError, json.JSONDecodeError) as e:
+        # We could not load the preexisting key, generate a new one and
+        # associate the gateway with it.
         print("Generating new identity & PSK")
         identity = uuid.uuid4().hex
         api_factory = APIFactory(host=args.host, psk_id=identity)
@@ -137,6 +139,8 @@ Make sure to replace `$SECURITY_CODE` with the string you can find on the back o
 ```bash
 reboot_tradfri.py $IP -k "$KEY" -c ~/tradfri_identity.json
 ```
+
+Note: `tradfri_identity.json` does not exist at this point, but the script will create it and save the pre-shared key in it.
 
 Finally, we will reboot the gateway each morning at 5 AM.
 At this point everybody should be asleep and not using the lights so it should not create any issues.
