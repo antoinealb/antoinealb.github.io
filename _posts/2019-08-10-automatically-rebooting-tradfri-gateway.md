@@ -99,6 +99,7 @@ def load_identity(config_file):
 def save_identity(config_file, identity, psk):
     conf = {'identity': identity, 'psk': psk}
     config_file.seek(0)
+    config_file.truncate()
     json.dump(conf, config_file, indent=2)
 
 
