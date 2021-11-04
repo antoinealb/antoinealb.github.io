@@ -58,13 +58,15 @@ This can be used from a crontab to avoid a memory leak in the tradfri firmware.
 """
 
 from pytradfri import Gateway
-from pytradfri.api.libcoap_api import APIFactory
+from pytradfri.api.libcoap_api import APIFactory, retry_timeout
 from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 
 import uuid
 import argparse
 import json
+
+TIMEOUT_SECONDS = 40
 
 
 def parse_args():
@@ -111,18 +113,18 @@ def main():
     try:
         # Try to load a pre-existing shared key from the configuration file
         identity, psk = load_identity(args.config)
-        api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk)
+        api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk, timeout=TIMEOUT_SECONDS)
     except (KeyError, json.JSONDecodeError) as e:
         # We could not load the preexisting key, generate a new one and
         # associate the gateway with it.
         print("Generating new identity & PSK")
         identity = uuid.uuid4().hex
-        api_factory = APIFactory(host=args.host, psk_id=identity)
+        api_factory = APIFactory(host=args.host, psk_id=identity, timeout=TIMEOUT_SECONDS)
         psk = api_factory.generate_psk(args.key)
 
         save_identity(args.config, identity, psk)
 
-    api = api_factory.request
+    api = retry_timeout(api_factory.request, retries=10)
 
     gateway = Gateway()
     api(gateway.reboot())
