@@ -7,7 +7,7 @@ tags: linux
 Recently Swisscom (Switzerland's biggest ISP) decided to give me a new box (modem + router + hotspot) since the previous one was already 7 years old.
 I was quite happy to get a new and hopefully 802.11N compatible router, but as I was just coming back from the CCC, I had to try to find what was inside.
 In the end I did not find the huge root-level backdoor I was hoping to find, but learnt a lot in the process.
-I published my notes on [https://github.com/antoinealb/swisscom_centro_grande](Github) and got a few emails from fellow hackers trying to replicate my results.
+I published my notes on [Github](https://github.com/antoinealb/swisscom_centro_grande) and got a few emails from fellow hackers trying to replicate my results.
 Now that I have a blog I might as well do an article about it, to have some content online !
 
 ## Disclaimer 1
